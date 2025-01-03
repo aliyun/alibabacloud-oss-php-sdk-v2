@@ -4,7 +4,7 @@
 
 alibabacloud-oss-php-sdk-v2 is the Developer Preview for the v2 of the OSS SDK for the PHP programming language
 
-## [README in Chinese](README-CN.md)
+## [简体中文](README-CN.md)
 
 ## About
 > - This PHP SDK is based on the official APIs of [Alibaba Cloud OSS](http://www.aliyun.com/product/oss/).
@@ -28,7 +28,7 @@ You can also declare the dependency on Alibaba Cloud OSS SDK for PHP v2 in the c
 }
 ```
 
-### Install from the Phar file directly
+### Install from the [PHAR File](https://github.com/aliyun/alibabacloud-oss-php-sdk-v2/releases) directly
 ```bash
 $ require_once '/path/to/alibabacloud-oss-php-sdk-v2-{version}.phar'
 ```

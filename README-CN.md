@@ -4,7 +4,7 @@
 
 alibabacloud-oss-php-sdk-v2 是OSS在PHP编译语言下的第二版SDK
 
-## [README in English](README.md)
+## [English](README.md)
 
 ## 关于
 > - 此PHP SDK基于[阿里云对象存储服务](http://www.aliyun.com/product/oss/)官方API构建。
@@ -29,7 +29,7 @@ $ composer require alibabacloud/oss-v2
 ```
 然后通过`composer install`安装依赖
 
-### 通过Phar打包文件安装
+### 通过[PHAR 文件](https://github.com/aliyun/alibabacloud-oss-php-sdk-v2/releases)安装
 ```bash
 require_once '/path/to/alibabacloud-oss-php-sdk-v2-{version}.phar'
 ```
