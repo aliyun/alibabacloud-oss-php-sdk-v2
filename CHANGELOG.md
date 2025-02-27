@@ -1,5 +1,24 @@
 # ChangeLog - Alibaba Cloud OSS SDK for PHP v2
 
+## 版本号：0.2.0 日期：2025-02-27
+### 变更内容
+- Feature：Add bucket lifecycle api
+- Feature：Add bucket bucket transfer acceleration api
+- Feature：Add bucket policy api
+- Feature：Add bucket logging api
+- Feature：Add bucket website api
+- Feature：Add bucket referer api
+- Feature：Add bucket tags api
+- Feature：Add bucket request payment api
+- Feature：Add bucket cors api
+- Feature：Add bucket cname api
+- Feature：Add bucket access monitor api
+- Feature：Add bucket meta query api
+- Feature：Add bucket encryption api
+- Feature：Add bucket archive direct read api
+- Feature：Add public access block api for oss resource, bucket resource
+- Update：change guzzlehttp/psr7 version to "^2.7"
+  
 ## 版本号：0.1.0 日期：2025-01-03
 ### 变更内容
 - Feature：Add credentials provider
