@@ -212,6 +212,14 @@ use AlibabaCloud\Oss\V2\Transform;
  * @method \GuzzleHttp\Promise\Promise putBucketPublicAccessBlockAsync(Models\PutBucketPublicAccessBlockRequest $request, array $args = []) Enables or disables Block Public Access for a bucket.
  * @method Models\DeleteBucketPublicAccessBlockResult deleteBucketPublicAccessBlock(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
  * @method \GuzzleHttp\Promise\Promise deleteBucketPublicAccessBlockAsync(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
+ * @method Models\PutBucketInventoryResult putBucketInventory(Models\PutBucketInventoryRequest $request, array $args = []) Configures an inventory for a bucket.
+ * @method \GuzzleHttp\Promise\Promise putBucketInventoryAsync(Models\PutBucketInventoryRequest $request, array $args = []) Configures an inventory for a bucket.
+ * @method Models\GetBucketInventoryResult getBucketInventory(Models\GetBucketInventoryRequest $request, array $args = []) Queries the inventories that are configured for a bucket.
+ * @method \GuzzleHttp\Promise\Promise getBucketInventoryAsync(Models\GetBucketInventoryRequest $request, array $args = []) Queries the inventories that are configured for a bucket.
+ * @method Models\ListBucketInventoryResult listBucketInventory(Models\ListBucketInventoryRequest $request, array $args = []) Queries all inventories in a bucket at a time.
+ * @method \GuzzleHttp\Promise\Promise listBucketInventoryAsync(Models\ListBucketInventoryRequest $request, array $args = []) Queries all inventories in a bucket at a time.
+ * @method Models\DeleteBucketInventoryResult deleteBucketInventory(Models\DeleteBucketInventoryRequest $request, array $args = []) Deletes an inventory for a bucket.
+ * @method \GuzzleHttp\Promise\Promise deleteBucketInventoryAsync(Models\DeleteBucketInventoryRequest $request, array $args = []) Deletes an inventory for a bucket.
  */
 final class Client
 {
