@@ -1,5 +1,11 @@
 # ChangeLog - Alibaba Cloud OSS SDK for PHP v2
 
+## 版本号：0.2.1 日期：2025-03-18
+### 变更内容
+- Fix：add a default content-type if possible.
+- Fix：use end() to get last error
+- Fix：compatibility with php 8.0
+
 ## 版本号：0.2.0 日期：2025-02-27
 ### 变更内容
 - Feature：Add bucket lifecycle api
