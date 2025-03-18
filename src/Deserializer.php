@@ -97,6 +97,7 @@ final class Deserializer
 
             $type = (string)$property->getType();
             $value = self::deserializeXmlAny($element->$name, $type, $annotation);
+            $property->setAccessible(true);
             $property->setValue($obj, $value);
         }
 
@@ -233,6 +234,7 @@ final class Deserializer
             }
 
             $value = self::castToAny( $headers[$name], $annotation->type, $annotation->format);
+            $property->setAccessible(true);
             $property->setValue($result, $value);
         }
 
@@ -249,6 +251,7 @@ final class Deserializer
             }
 
             if (count($meta) > 0) {
+                $property->setAccessible(true);
                 $property->setValue($result, $meta);
             }
         }
@@ -277,6 +280,7 @@ final class Deserializer
 
             if ('xml' === $annotation->format) {
                 $value = self::deserializeXml($content, $annotation->type, $annotation->rename);
+                $property->setAccessible(true);
                 $property->setValue($result, $value);
             } else {
                 throw new DeserializationExecption("Unsupport body format:$annotation->format");
