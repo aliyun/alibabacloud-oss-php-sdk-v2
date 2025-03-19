@@ -278,9 +278,13 @@ final class Client
         }
 
         // args, {Operation}Request request, array options
-        $request = isset($args[0]) ? $args[0] : [];
-        $options = count($args) > 1 ? $args[1] : [];
+        $request = $args[0] ?? [];
+        $options = $args[1] ?? [];
 
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $request = $args['request'] ?? $request;
+            $options = $args['args'] ?? $options;
+        }
         if (!($request instanceof Types\RequestModel)) {
             throw new \InvalidArgumentException('args[0] is not subclass of RequestModel, got ' . \gettype($request));
         }
