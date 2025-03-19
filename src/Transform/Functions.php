@@ -137,6 +137,11 @@ final class Functions
         'GetBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
         'PutBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
         'DeleteBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
+        // bucket style
+        'PutStyle' => 'BucketStyle',
+        'ListStyle' => 'BucketStyle',
+        'GetStyle' => 'BucketStyle',
+        'DeleteStyle' => 'BucketStyle',
     ];
 
     public static function getTransformClass(string $apiName)
