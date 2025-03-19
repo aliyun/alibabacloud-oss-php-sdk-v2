@@ -137,6 +137,12 @@ final class Functions
         'GetBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
         'PutBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
         'DeleteBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
+        // bucket redundancy transition
+        'ListBucketDataRedundancyTransition' => 'BucketRedundancyTransition',
+        'ListUserDataRedundancyTransition' => 'BucketRedundancyTransition',
+        'GetBucketDataRedundancyTransition' => 'BucketRedundancyTransition',
+        'CreateBucketDataRedundancyTransition' => 'BucketRedundancyTransition',
+        'DeleteBucketDataRedundancyTransition' => 'BucketRedundancyTransition',
     ];
 
     public static function getTransformClass(string $apiName)

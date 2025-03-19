@@ -212,6 +212,16 @@ use AlibabaCloud\Oss\V2\Transform;
  * @method \GuzzleHttp\Promise\Promise putBucketPublicAccessBlockAsync(Models\PutBucketPublicAccessBlockRequest $request, array $args = []) Enables or disables Block Public Access for a bucket.
  * @method Models\DeleteBucketPublicAccessBlockResult deleteBucketPublicAccessBlock(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
  * @method \GuzzleHttp\Promise\Promise deleteBucketPublicAccessBlockAsync(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
+ * @method Models\ListBucketDataRedundancyTransitionResult listBucketDataRedundancyTransition(Models\ListBucketDataRedundancyTransitionRequest $request, array $args = []) Lists all redundancy type conversion tasks of a bucket.
+ * @method \GuzzleHttp\Promise\Promise listBucketDataRedundancyTransitionAsync(Models\ListBucketDataRedundancyTransitionRequest $request, array $args = []) Lists all redundancy type conversion tasks of a bucket.
+ * @method Models\ListUserDataRedundancyTransitionResult listUserDataRedundancyTransition(Models\ListUserDataRedundancyTransitionRequest $request, array $args = []) Lists all redundancy type conversion tasks.
+ * @method \GuzzleHttp\Promise\Promise listUserDataRedundancyTransitionAsync(Models\ListUserDataRedundancyTransitionRequest $request, array $args = []) Lists all redundancy type conversion tasks.
+ * @method Models\GetBucketDataRedundancyTransitionResult getBucketDataRedundancyTransition(Models\GetBucketDataRedundancyTransitionRequest $request, array $args = []) Queries the redundancy type conversion tasks of a bucket.
+ * @method \GuzzleHttp\Promise\Promise getBucketDataRedundancyTransitionAsync(Models\GetBucketDataRedundancyTransitionRequest $request, array $args = []) Queries the redundancy type conversion tasks of a bucket.
+ * @method Models\CreateBucketDataRedundancyTransitionResult createBucketDataRedundancyTransition(Models\CreateBucketDataRedundancyTransitionRequest $request, array $args = []) Creates a redundancy type conversion task for a bucket.
+ * @method \GuzzleHttp\Promise\Promise createBucketDataRedundancyTransitionAsync(Models\CreateBucketDataRedundancyTransitionRequest $request, array $args = []) Creates a redundancy type conversion task for a bucket.
+ * @method Models\DeleteBucketDataRedundancyTransitionResult deleteBucketDataRedundancyTransition(Models\DeleteBucketDataRedundancyTransitionRequest $request, array $args = []) Deletes a redundancy type conversion task of a bucket.
+ * @method \GuzzleHttp\Promise\Promise deleteBucketDataRedundancyTransitionAsync(Models\DeleteBucketDataRedundancyTransitionRequest $request, array $args = []) Deletes a redundancy type conversion task of a bucket.
  */
 final class Client
 {
