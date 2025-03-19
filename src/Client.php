@@ -212,6 +212,10 @@ use AlibabaCloud\Oss\V2\Transform;
  * @method \GuzzleHttp\Promise\Promise putBucketPublicAccessBlockAsync(Models\PutBucketPublicAccessBlockRequest $request, array $args = []) Enables or disables Block Public Access for a bucket.
  * @method Models\DeleteBucketPublicAccessBlockResult deleteBucketPublicAccessBlock(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
  * @method \GuzzleHttp\Promise\Promise deleteBucketPublicAccessBlockAsync(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
+ * @method Models\GetBucketHttpsConfigResult getBucketHttpsConfig(Models\GetBucketHttpsConfigRequest $request, array $args = []) Queries the Transport Layer Security (TLS) version configurations of a bucket.
+ * @method \GuzzleHttp\Promise\Promise getBucketHttpsConfigAsync(Models\GetBucketHttpsConfigRequest $request, array $args = []) Queries the Transport Layer Security (TLS) version configurations of a bucket.
+ * @method Models\PutBucketHttpsConfigResult putBucketHttpsConfig(Models\PutBucketHttpsConfigRequest $request, array $args = []) Enables or disables Transport Layer Security (TLS) version management for a bucket.
+ * @method \GuzzleHttp\Promise\Promise putBucketHttpsConfigAsync(Models\PutBucketHttpsConfigRequest $request, array $args = []) Enables or disables Transport Layer Security (TLS) version management for a bucket.
  */
 final class Client
 {
