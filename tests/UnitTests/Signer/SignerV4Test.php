@@ -3,6 +3,7 @@
 namespace UnitTests\Signer;
 
 use AlibabaCloud\Oss\V2\Credentials\StaticCredentialsProvider;
+use AlibabaCloud\Oss\V2\Defaults;
 use AlibabaCloud\Oss\V2\Signer\SignerV4;
 use AlibabaCloud\Oss\V2\Signer\SigningContext;
 use DateTime;
@@ -87,6 +88,41 @@ class SignerV4Test extends \PHPUnit\Framework\TestCase
         $date = (new DateTime('now', new DateTimeZone('UTC')))->format("Ymd");
         $this->assertStringContainsString("ak/{$date}/cn-hangzhou/oss/aliyun_v4_request", $request->getHeaderLine("Authorization"));
         $this->assertStringContainsString('Signature=', $request->getHeaderLine("Authorization"));
+    }
+
+    public function testAuthHeaderWithCloudBox()
+    {
+        $provider = new StaticCredentialsProvider("ak", "sk");
+        $cred = $provider->getCredentials();
+
+        // case 1
+        $request = new Request("PUT", "http://bucket.cb-123.cn-hangzhou.oss-cloudbox.aliyuncs.com/1234+-/123/1.txt");
+        $request = $request->withHeader("x-oss-head1", "value")
+            ->withHeader("abc", "value")
+            ->withHeader("ZAbc", "value")
+            ->withHeader("XYZ", "value")
+            ->withHeader("content-type", "text/plain")
+            ->withHeader("x-oss-content-sha256", "UNSIGNED-PAYLOAD");
+        $signTime = new DateTime("@1702743657");
+        #$signCtx = new SigningContext(product: "oss", region: "cn-hangzhou", bucket: "bucket", key: "1234+-/123/1.txt", request: $request, credentials: $cred, time: $signTime);
+        $signCtx = new SigningContext();
+        $signCtx->product = Defaults::CLOUD_BOX_PRODUCT;
+        $signCtx->region = 'cb-123';
+        $signCtx->bucket = 'bucket';
+        $signCtx->key = '1234+-/123/1.txt';
+        $signCtx->credentials = $cred;
+        $signCtx->time = $signTime;
+        $signer = new SignerV4();
+        $query['param1'] = 'value1';
+        $query['+param1'] = 'value3';
+        $query['|param1'] = 'value4';
+        $query['+param2'] = '';
+        $query['|param2'] = '';
+        $query['param2'] = '';
+        $signCtx->request = $request->withUri($request->getUri()->withQuery(http_build_query($query)));
+        $signer->sign($signCtx);
+        $request = $signCtx->request;
+        $this->assertEquals('OSS4-HMAC-SHA256 Credential=ak/20231216/cb-123/oss-cloudbox/aliyun_v4_request,Signature=94ce1f12c17d148ea681030275a94449d3357f5b5b21133996eec80af3e08a43', $request->getHeaderLine("Authorization"));
     }
 
     public function testAuthHeaderToken()
@@ -492,5 +528,91 @@ class SignerV4Test extends \PHPUnit\Framework\TestCase
         $this->assertEquals('ak/20231217/cn-hangzhou/oss/aliyun_v4_request', $parsedQuery['x-oss-credential']);
         $this->assertEquals('33208021567953241c3cc1d95ecf1864f8561890c30d29488ce76c7afb81a623', $parsedQuery['x-oss-signature']);
         $this->assertEquals('abc;zabc', $parsedQuery['x-oss-additional-headers']);
+    }
+
+    public function testAuthQueryWithCloudBox()
+    {
+        $provider = new StaticCredentialsProvider("ak", "sk");
+        $cred = $provider->getCredentials();
+
+        // case 1
+        $request = new Request("PUT", "http://bucket.cb-123.cn-hangzhou.oss-cloudbox.aliyuncs.com/1234+-/123/1.txt");
+        $request = $request->withHeader("x-oss-head1", "value")
+            ->withHeader("abc", "value")
+            ->withHeader("ZAbc", "value")
+            ->withHeader("XYZ", "value")
+            ->withHeader("content-type", "application/octet-stream");
+        $signTime = new DateTime("@1702781677");
+        $time = new DateTime("@1702782276");
+        #$signCtx = new SigningContext(product: "oss", region: "cn-hangzhou", bucket: "bucket", key: "1234+-/123/1.txt", request: $request, credentials: $cred, time: $time, authMethodQuery: true);
+        $signCtx = new SigningContext();
+        $signCtx->product = Defaults::CLOUD_BOX_PRODUCT;
+        $signCtx->region = 'cb-123';
+        $signCtx->bucket = 'bucket';
+        $signCtx->key = '1234+-/123/1.txt';
+        $signCtx->credentials = $cred;
+        $signCtx->time = $time;
+        $signCtx->authMethodQuery = true;
+        $signCtx->signTime = $signTime;
+        $signCtx->additionalHeaders = ["ZAbc", "abc"];
+        $signer = new SignerV4();
+        $query['param1'] = 'value1';
+        $query['+param1'] = 'value3';
+        $query['|param1'] = 'value4';
+        $query['+param2'] = '';
+        $query['|param2'] = '';
+        $query['param2'] = '';
+        $signCtx->request = $request->withUri($request->getUri()->withQuery(http_build_query($query)));
+        $signer->sign($signCtx);
+        $request = $signCtx->request;
+        $queryParams = $request->getUri()->getQuery();
+        parse_str($queryParams, $parsedQuery);
+        $this->assertEquals('OSS4-HMAC-SHA256', $parsedQuery['x-oss-signature-version']);
+        $this->assertEquals('599', $parsedQuery['x-oss-expires']);
+        $this->assertEquals('ak/20231217/cb-123/oss-cloudbox/aliyun_v4_request', $parsedQuery['x-oss-credential']);
+        $this->assertEquals('07284191b9b4978ac3520cd39ee2dea2747eda454089359371ff463a6c7ba20f', $parsedQuery['x-oss-signature']);
+        $this->assertTrue(array_key_exists('x-oss-additional-headers', $parsedQuery));
+        $this->assertEquals('abc;zabc', $parsedQuery['x-oss-additional-headers']);
+
+        // with default signed header
+        $request = new Request("PUT", "http://bucket.cb-123.cn-hangzhou.oss-cloudbox.aliyuncs.com/1234+-/123/1.txt");
+        $request = $request->withHeader("x-oss-head1", "value")
+            ->withHeader("x-oss-head1", "value")
+            ->withHeader("abc", "value")
+            ->withHeader("ZAbc", "value")
+            ->withHeader("XYZ", "value")
+            ->withHeader("content-type", "application/octet-stream");
+        $signTime = new DateTime("@1702783809");
+        $time = new DateTime("@1702784408");
+        $signCtx = new SigningContext();
+        $signCtx->product = 'oss-cloudbox';
+        $signCtx->region = 'cb-123';
+        $signCtx->bucket = 'bucket';
+        $signCtx->key = '1234+-/123/1.txt';
+        $signCtx->credentials = $cred;
+        $signCtx->authMethodQuery = true;
+        $signCtx->signTime = $signTime;
+        $signCtx->time = $time;
+        $signCtx->additionalHeaders = ["x-oss-no-exist", "abc", "x-oss-head1", "ZAbc"];
+        $signer = new SignerV4();
+        $query['param1'] = 'value1';
+        $query['+param1'] = 'value3';
+        $query['|param1'] = 'value4';
+        $query['+param2'] = '';
+        $query['|param2'] = '';
+        $query['param2'] = '';
+        $signCtx->request = $request->withUri($request->getUri()->withQuery(http_build_query($query)));
+        $signer->sign($signCtx);
+        $request = $signCtx->request;
+        $queryParams = $request->getUri()->getQuery();
+        parse_str($queryParams, $parsedQuery);
+        $this->assertEquals('OSS4-HMAC-SHA256', $parsedQuery['x-oss-signature-version']);
+        $this->assertEquals('599', $parsedQuery['x-oss-expires']);
+        $this->assertEquals('ak/20231217/cb-123/oss-cloudbox/aliyun_v4_request', $parsedQuery['x-oss-credential']);
+        $this->assertEquals('16782cc8a7a554523db055eb804b508522e7e370073108ad88ee2f47496701dd', $parsedQuery['x-oss-signature']);
+        $this->assertTrue(array_key_exists('x-oss-additional-headers', $parsedQuery));
+        $this->assertEquals('abc;zabc', $parsedQuery['x-oss-additional-headers']);
+
+
     }
 }

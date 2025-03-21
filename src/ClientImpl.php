@@ -33,12 +33,12 @@ final class ClientImpl
         'user_agent' => null,
     ];
 
-    // guzzle 
+    // guzzle
     private GuzzleHttp\Client $httpClient;
     private $requestOptions = [
         //GuzzleHttp\RequestOptions::ALLOW_REDIRECTS
         'allow_redirects' => false,
-        //GuzzleHttp\RequestOptions::CONNECT_TIMEOUT 
+        //GuzzleHttp\RequestOptions::CONNECT_TIMEOUT
         'connect_timeout' => Defaults::CONNECT_TIMEOUT,
         //GuzzleHttp\RequestOptions::READ_TIMEOUT
         'read_timeout' => Defaults::READWRITE_TIMEOUT,
@@ -175,6 +175,7 @@ final class ClientImpl
         $this->resolveSigner($config, $options);
         $this->resolveAddressStyle($config, $options);
         $this->resolveFeatureFlags($config, $options);
+        $this->resolveCloudBox($config, $options);
 
         $this->sdkOptions = $options;
 
@@ -282,6 +283,35 @@ final class ClientImpl
         }
     }
 
+    private function resolveCloudBox(Config &$config, array &$options)
+    {
+        if ($config->getCloudBoxId() !== null) {
+            $options['region'] = $config->getCloudBoxId();
+            $options['product'] = Defaults::CLOUD_BOX_PRODUCT;
+            return;
+        }
+        if ($config->getEnableAutoDetectCloudBoxId() == false) {
+            return;
+        }
+        if ($config->getEndpoint() == null) {
+            return;
+        }
+        //cb-***.{region}.oss-cloudbox-control.aliyuncs.com
+        //cb-***.{region}.oss-cloudbox.aliyuncs.com
+        $uri = new GuzzleHttp\Psr7\Uri($config->getEndpoint());
+        $path = !empty($uri->getHost()) ? $uri->getHost() : $uri->getPath();
+        if (!(substr($path, -strlen('.oss-cloudbox.aliyuncs.com')) === '.oss-cloudbox.aliyuncs.com' || substr($path, -strlen('.oss-cloudbox-control.aliyuncs.com')) === '.oss-cloudbox-control.aliyuncs.com')) {
+            return;
+        }
+        $keys = explode('.', $path);
+        if ($keys == false ||
+            count($keys) !== 5 ||
+            substr($keys[0], 0, strlen('cb-')) !== 'cb-') {
+            return;
+        }
+        $options['region'] = $keys[0];
+        $options['product'] = Defaults::CLOUD_BOX_PRODUCT;
+    }
 
     private function resolveOptions(array &$options)
     {

@@ -44,7 +44,7 @@ final class Config
     private $insecureSkipVerify;
 
     /**
-     * @var ?float The time in seconds till a timeout exception is thrown when attempting to make a connection. 
+     * @var ?float The time in seconds till a timeout exception is thrown when attempting to make a connection.
      *             The default is 10 seconds.
      */
     private $connectTimeout;
@@ -76,7 +76,7 @@ final class Config
     /**
      * @var ?bool You can use an internal endpoint to communicate between Alibaba Cloud services located
      *            within the same region over the internal network.
-     *            You are not charged for the traffic generated over the internal network.  
+     *            You are not charged for the traffic generated over the internal network.
      *            Set this to True to use a internal endpoint for the requests.
      */
     private $useInternalEndpoint;
@@ -88,7 +88,7 @@ final class Config
     private $useCname;
 
     /**
-     * @var ?bool Allows you to enable the client to use path-style addressing, 
+     * @var ?bool Allows you to enable the client to use path-style addressing,
      *            i.e., https://oss-cn-hangzhou.aliyuncs.com/bucket/key.
      */
     private $usePathStyle;
@@ -110,12 +110,47 @@ final class Config
      */
     private $userAgent;
 
+    /**
+     * The cloud box id
+     * @var string|null
+     */
+    private ?string $cloudBoxId;
+
+    /**
+     * The cloud box id is automatically extracted from endpoint.
+     * @var bool|null
+     */
+    private ?bool $enableAutoDetectCloudBoxId;
+
 
     /**
      * @var ?array Additional signable headers.
      */
     private $additionalHeaders;
 
+    /**
+     * Config constructor.
+     * @param string|null $region
+     * @param string|null $endpoint
+     * @param string|null $signatureVersion
+     * @param CredentialsProvider|null $credentialsProvider
+     * @param bool|null $disableSSL
+     * @param bool|null $insecureSkipVerify
+     * @param float|null $connectTimeout
+     * @param float|null $readwriteTimeout
+     * @param string|null $proxyHost
+     * @param bool|null $useDualStackEndpoint
+     * @param bool|null $useAccelerateEndpoint
+     * @param bool|null $useInternalEndpoint
+     * @param bool|null $useCname
+     * @param bool|null $usePathStyle
+     * @param int|null $retryMaxAttempts
+     * @param Retry\RetryerInterface|null $retryer
+     * @param string|null $userAgent
+     * @param array|null $additionalHeaders
+     * @param string|null $cloudBoxId
+     * @param bool|null $enableAutoDetectCloudBoxId
+     */
     public function __construct(
         ?string $region = null,
         ?string $endpoint = null,
@@ -134,8 +169,11 @@ final class Config
         ?int $retryMaxAttempts = null,
         ?Retry\RetryerInterface $retryer = null,
         ?string $userAgent = null,
-        ?array $additionalHeaders = null
-    ) {
+        ?array $additionalHeaders = null,
+        ?string $cloudBoxId = null,
+        ?bool $enableAutoDetectCloudBoxId = null
+    )
+    {
         $this->region = $region;
         $this->endpoint = $endpoint;
         $this->signatureVersion = $signatureVersion;
@@ -154,6 +192,8 @@ final class Config
         $this->retryer = $retryer;
         $this->userAgent = $userAgent;
         $this->additionalHeaders = $additionalHeaders;
+        $this->cloudBoxId = $cloudBoxId;
+        $this->enableAutoDetectCloudBoxId = $enableAutoDetectCloudBoxId;
     }
 
     public static function loadDefault(): Config
@@ -174,7 +214,7 @@ final class Config
     /**
      * Set the region in which the bucket is located.
      *
-     * @param  string  $region  The region in which the bucket is located.
+     * @param string $region The region in which the bucket is located.
      *
      * @return  self
      */
@@ -198,7 +238,7 @@ final class Config
     /**
      * Set the domain names that other services can use to access OSS.
      *
-     * @param  string  $endpoint  The domain names that other services can use to access OSS.
+     * @param string $endpoint The domain names that other services can use to access OSS.
      *
      * @return  self
      */
@@ -222,7 +262,7 @@ final class Config
     /**
      * Set the signature version when signing requests. Valid values v4, v1
      *
-     * @param  string  $signatureVersion  The signature version when signing requests. Valid values v4, v1
+     * @param string $signatureVersion The signature version when signing requests. Valid values v4, v1
      *
      * @return  self
      */
@@ -246,7 +286,7 @@ final class Config
     /**
      * Set the credentials provider to use when signing requests.
      *
-     * @param  CredentialsProvider  $credentialsProvider  The credentials provider to use when signing requests.
+     * @param CredentialsProvider $credentialsProvider The credentials provider to use when signing requests.
      *
      * @return  self
      */
@@ -270,7 +310,7 @@ final class Config
     /**
      * Set forces the endpoint to be resolved as HTTP.
      *
-     * @param  bool  $disableSSL  Forces the endpoint to be resolved as HTTP.
+     * @param bool $disableSSL Forces the endpoint to be resolved as HTTP.
      *
      * @return  self
      */
@@ -294,7 +334,7 @@ final class Config
     /**
      * Set enable http redirect or not. Default is disable
      *
-     * @param  ?bool  $enabledRedirect  Enable http redirect or not. Default is disable
+     * @param  ?bool $enabledRedirect Enable http redirect or not. Default is disable
      *
      * @return  self
      */
@@ -318,7 +358,7 @@ final class Config
     /**
      * Set skip server certificate verification.
      *
-     * @param  ?bool  $insecureSkipVerify  Skip server certificate verification.
+     * @param  ?bool $insecureSkipVerify Skip server certificate verification.
      *
      * @return  self
      */
@@ -342,7 +382,7 @@ final class Config
     /**
      * Set the time in seconds till a timeout exception is thrown when attempting to make a connection.
      *
-     * @param  ?float  $connectTimeout  The time in seconds till a timeout exception is thrown when attempting to make a connection.
+     * @param  ?float $connectTimeout The time in seconds till a timeout exception is thrown when attempting to make a connection.
      *
      * @return  self
      */
@@ -366,7 +406,7 @@ final class Config
     /**
      * Set the time in seconds till a timeout exception is thrown when attempting to read from a connection.
      *
-     * @param  ?float  $readwriteTimeout  The time in seconds till a timeout exception is thrown when attempting to read from a connection.
+     * @param  ?float $readwriteTimeout The time in seconds till a timeout exception is thrown when attempting to read from a connection.
      *
      * @return  self
      */
@@ -390,7 +430,7 @@ final class Config
     /**
      * Set the proxy setting.
      *
-     * @param  ?string  $proxyHost  The proxy setting.
+     * @param  ?string $proxyHost The proxy setting.
      *
      * @return  self
      */
@@ -414,7 +454,7 @@ final class Config
     /**
      * Set dual-stack endpoints are provided in some regions.
      *
-     * @param  ?bool  $useDualStackEndpoint  Dual-stack endpoints are provided in some regions.
+     * @param  ?bool $useDualStackEndpoint Dual-stack endpoints are provided in some regions.
      *
      * @return  self
      */
@@ -438,7 +478,7 @@ final class Config
     /**
      * Set oSS provides the transfer acceleration feature to accelerate date transfers
      *
-     * @param  ?bool  $useAccelerateEndpoint  OSS provides the transfer acceleration feature to accelerate date transfers
+     * @param  ?bool $useAccelerateEndpoint OSS provides the transfer acceleration feature to accelerate date transfers
      *
      * @return  self
      */
@@ -462,7 +502,7 @@ final class Config
     /**
      * Set you can use an internal endpoint to communicate between Alibaba Cloud services located
      *
-     * @param  ?bool  $useInternalEndpoint  You can use an internal endpoint to communicate between Alibaba Cloud services located
+     * @param  ?bool $useInternalEndpoint You can use an internal endpoint to communicate between Alibaba Cloud services located
      *
      * @return  self
      */
@@ -486,7 +526,7 @@ final class Config
     /**
      * Set if the endpoint is s CName, set this flag to true
      *
-     * @param  ?bool  $useCname  If the endpoint is s CName, set this flag to true
+     * @param  ?bool $useCname If the endpoint is s CName, set this flag to true
      *
      * @return  self
      */
@@ -510,7 +550,7 @@ final class Config
     /**
      * Set allows you to enable the client to use path-style addressing,
      *
-     * @param  ?bool  $usePathStyle  Allows you to enable the client to use path-style addressing,
+     * @param  ?bool $usePathStyle Allows you to enable the client to use path-style addressing,
      *
      * @return  self
      */
@@ -534,7 +574,7 @@ final class Config
     /**
      * Set specifies the maximum number attempts an API client will call
      *
-     * @param  ?int  $retryMaxAttempts  Specifies the maximum number attempts an API client will call
+     * @param  ?int $retryMaxAttempts Specifies the maximum number attempts an API client will call
      *
      * @return  self
      */
@@ -558,7 +598,7 @@ final class Config
     /**
      * Set guides how HTTP requests should be retried in case of recoverable failures.
      *
-     * @param  ?Retry\RetryerInterface  $retryer  Guides how HTTP requests should be retried in case of recoverable failures.
+     * @param  ?Retry\RetryerInterface $retryer Guides how HTTP requests should be retried in case of recoverable failures.
      *
      * @return  self
      */
@@ -582,7 +622,7 @@ final class Config
     /**
      * Set the optional user specific identifier appended to the User-Agent header.
      *
-     * @param  ?string  $userAgent  The optional user specific identifier appended to the User-Agent header.
+     * @param  ?string $userAgent The optional user specific identifier appended to the User-Agent header.
      *
      * @return  self
      */
@@ -606,7 +646,7 @@ final class Config
     /**
      * Set additional signable headers.
      *
-     * @param  ?array  $additionalHeaders  Additional signable headers.
+     * @param  ?array $additionalHeaders Additional signable headers.
      *
      * @return  self
      */
@@ -615,5 +655,46 @@ final class Config
         $this->additionalHeaders = $additionalHeaders;
 
         return $this;
+    }
+
+    /**
+     * Set enable auto detect cloud box id.
+     * @param bool $enableAutoDetectCloudBoxId
+     * @return $this
+     */
+    public function setEnableAutoDetectCloudBoxId(bool $enableAutoDetectCloudBoxId)
+    {
+        $this->enableAutoDetectCloudBoxId = $enableAutoDetectCloudBoxId;
+
+        return $this;
+    }
+
+    /**
+     * Get enable auto detect cloud box id.
+     * @return bool|null
+     */
+    public function getEnableAutoDetectCloudBoxId()
+    {
+        return $this->enableAutoDetectCloudBoxId;
+    }
+
+    /**
+     * Set cloud box id.
+     * @param string $cloudBoxId
+     * @return  self
+     */
+    public function setCloudBoxId(string $cloudBoxId)
+    {
+        $this->cloudBoxId = $cloudBoxId;
+        return $this;
+    }
+
+    /**
+     * Get cloud box id.
+     * @return string
+     */
+    public function getCloudBoxId()
+    {
+        return $this->cloudBoxId;
     }
 }

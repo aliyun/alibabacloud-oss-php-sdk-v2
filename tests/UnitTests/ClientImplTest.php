@@ -65,7 +65,8 @@ class ClientImplTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('header', $sdkOptions['auth_method']);
         $this->assertEquals(null, $sdkOptions['response_handlers']);
         $this->assertEquals(0, $sdkOptions['feature_flags']);
-        $this->assertEquals(null, $sdkOptions['additional_headers']);
+        $this->assertEquals(null, $cfg->getCloudBoxId());
+        $this->assertEquals(null,  $cfg->getEnableAutoDetectCloudBoxId());
 
         #$this->assertEquals('oss', $sdkOptions['response_stream']);
 
@@ -76,6 +77,17 @@ class ClientImplTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10.0, $requestOptions['connect_timeout']);
         $this->assertEquals(20.0, $requestOptions['read_timeout']);
         $this->assertEquals(True, $requestOptions['verify']);
+
+        // test cloud box id
+        $cfg = Config::loadDefault();
+        $cfg->setCloudBoxId('cb-1234');
+        $this->assertEquals('cb-1234', $cfg->getCloudBoxId());
+
+        $cfg->setEnableAutoDetectCloudBoxId(true);
+        $this->assertTrue($cfg->getEnableAutoDetectCloudBoxId());
+
+        $cfg->setEnableAutoDetectCloudBoxId(false);
+        $this->assertFalse($cfg->getEnableAutoDetectCloudBoxId());
     }
 
     public function testConfigCredentialsProvider()
@@ -175,7 +187,6 @@ class ClientImplTest extends \PHPUnit\Framework\TestCase
         $cfg = Config::loadDefault();
         $cfg->setRegion('cn-beijing');
         $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
-
         $client = new ClientImpl($cfg);
         $ro = new \ReflectionObject($client);
         $pSdkOptions = $ro->getProperty('sdkOptions');
@@ -260,6 +271,8 @@ class ClientImplTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(GuzzleHttp\Psr7\Uri::class, $sdkOptions['endpoint']);
         $this->assertEquals('http', $sdkOptions['endpoint']->getScheme());
         $this->assertEquals('cn-hangzhou.oss.aliyuncs.com', $sdkOptions['endpoint']->getAuthority());
+
+
     }
 
     public function testConfigAddressStyle()
@@ -1982,6 +1995,158 @@ class ClientImplTest extends \PHPUnit\Framework\TestCase
         } catch (\Throwable $e) {
             $this->assertStringContainsString('Credentials is null or empty.', $e->getMessage());
         }
+    }
+
+    public function testConfigWithCloudBoxId()
+    {
+        // set cloud box id
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('test-region');
+        $cfg->setEndpoint('test-endpoint');
+        $cfg->setCloudBoxId('test-cloudbox-id');
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        $pInnerOptions = $ro->getProperty('innerOptions');
+        $pRequestOptions = $ro->getProperty('requestOptions');
+        $pSdkOptions->setAccessible(true);
+        $pInnerOptions->setAccessible(true);
+        $pRequestOptions->setAccessible(true);
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals(Defaults::CLOUD_BOX_PRODUCT, $sdkOptions['product']);
+        $this->assertEquals('test-cloudbox-id', $sdkOptions['region']);
+        $this->assertInstanceOf(GuzzleHttp\Psr7\Uri::class, $sdkOptions['endpoint']);
+        $this->assertEquals('https', $sdkOptions['endpoint']->getScheme());
+        $this->assertEquals('test-endpoint', $sdkOptions['endpoint']->getAuthority());
+        $this->assertEquals('test-cloudbox-id', $cfg->getCloudBoxId());
+        $this->assertEquals(null,  $cfg->getEnableAutoDetectCloudBoxId());
+
+        // cb-***.{region}.oss-cloudbox-control.aliyuncs.com
+        // cb-***.{region}.oss-cloudbox.aliyuncs.com
+
+        // auto detect cloud box id default
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('test-region');
+        $cfg->setEndpoint('cb-123.test-region.oss-cloudbox-control.aliyuncs.com');
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        $pInnerOptions = $ro->getProperty('innerOptions');
+        $pRequestOptions = $ro->getProperty('requestOptions');
+        $pSdkOptions->setAccessible(true);
+        $pInnerOptions->setAccessible(true);
+        $pRequestOptions->setAccessible(true);
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals('oss', $sdkOptions['product']);
+        $this->assertEquals('test-region', $sdkOptions['region']);
+        $this->assertInstanceOf(GuzzleHttp\Psr7\Uri::class, $sdkOptions['endpoint']);
+        $this->assertEquals('https', $sdkOptions['endpoint']->getScheme());
+        $this->assertEquals('cb-123.test-region.oss-cloudbox-control.aliyuncs.com', $sdkOptions['endpoint']->getAuthority());
+
+        // auto detect cloudbox id set false
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('test-region');
+        $cfg->setEndpoint('cb-123.test-region.oss-cloudbox-control.aliyuncs.com');
+        $cfg->setEnableAutoDetectCloudBoxId(false);
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        $pInnerOptions = $ro->getProperty('innerOptions');
+        $pRequestOptions = $ro->getProperty('requestOptions');
+        $pSdkOptions->setAccessible(true);
+        $pInnerOptions->setAccessible(true);
+        $pRequestOptions->setAccessible(true);
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals('oss', $sdkOptions['product']);
+        $this->assertEquals('test-region', $sdkOptions['region']);
+        $this->assertInstanceOf(GuzzleHttp\Psr7\Uri::class, $sdkOptions['endpoint']);
+        $this->assertEquals('https', $sdkOptions['endpoint']->getScheme());
+        $this->assertEquals('cb-123.test-region.oss-cloudbox-control.aliyuncs.com', $sdkOptions['endpoint']->getAuthority());
+
+        // auto detect cloudbox id set true
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('test-region');
+        $cfg->setEndpoint('cb-123.test-region.oss-cloudbox-control.aliyuncs.com');
+        $cfg->setEnableAutoDetectCloudBoxId(true);
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        $pInnerOptions = $ro->getProperty('innerOptions');
+        $pRequestOptions = $ro->getProperty('requestOptions');
+        $pSdkOptions->setAccessible(true);
+        $pInnerOptions->setAccessible(true);
+        $pRequestOptions->setAccessible(true);
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals(Defaults::CLOUD_BOX_PRODUCT, $sdkOptions['product']);
+        $this->assertEquals('cb-123', $sdkOptions['region']);
+        $this->assertInstanceOf(GuzzleHttp\Psr7\Uri::class, $sdkOptions['endpoint']);
+        $this->assertEquals('https', $sdkOptions['endpoint']->getScheme());
+        $this->assertEquals('cb-123.test-region.oss-cloudbox-control.aliyuncs.com', $sdkOptions['endpoint']->getAuthority());
+
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('test-region');
+        $cfg->setEndpoint('cb-123.test-region.oss-cloudbox.aliyuncs.com');
+        $cfg->setEnableAutoDetectCloudBoxId(true);
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        $pInnerOptions = $ro->getProperty('innerOptions');
+        $pRequestOptions = $ro->getProperty('requestOptions');
+        $pSdkOptions->setAccessible(true);
+        $pInnerOptions->setAccessible(true);
+        $pRequestOptions->setAccessible(true);
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals(Defaults::CLOUD_BOX_PRODUCT, $sdkOptions['product']);
+        $this->assertEquals('cb-123', $sdkOptions['region']);
+        $this->assertInstanceOf(GuzzleHttp\Psr7\Uri::class, $sdkOptions['endpoint']);
+        $this->assertEquals('https', $sdkOptions['endpoint']->getScheme());
+        $this->assertEquals('cb-123.test-region.oss-cloudbox.aliyuncs.com', $sdkOptions['endpoint']->getAuthority());
+
+        // auto detect cloudbox id set true + non cloud box endpoint
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('test-region');
+        $cfg->setEndpoint('cb-123.test-region.oss.aliyuncs.com');
+        $cfg->setEnableAutoDetectCloudBoxId(true);
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        $pInnerOptions = $ro->getProperty('innerOptions');
+        $pRequestOptions = $ro->getProperty('requestOptions');
+        $pSdkOptions->setAccessible(true);
+        $pInnerOptions->setAccessible(true);
+        $pRequestOptions->setAccessible(true);
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals('oss', $sdkOptions['product']);
+        $this->assertEquals('test-region', $sdkOptions['region']);
+        $this->assertInstanceOf(GuzzleHttp\Psr7\Uri::class, $sdkOptions['endpoint']);
+        $this->assertEquals('https', $sdkOptions['endpoint']->getScheme());
+        $this->assertEquals('cb-123.test-region.oss.aliyuncs.com', $sdkOptions['endpoint']->getAuthority());
+
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('test-region');
+        $cfg->setEndpoint('cb-123.oss-cloudbox.aliyuncs.com');
+        $cfg->setEnableAutoDetectCloudBoxId(true);
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        $pInnerOptions = $ro->getProperty('innerOptions');
+        $pRequestOptions = $ro->getProperty('requestOptions');
+        $pSdkOptions->setAccessible(true);
+        $pInnerOptions->setAccessible(true);
+        $pRequestOptions->setAccessible(true);
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals('oss', $sdkOptions['product']);
+        $this->assertEquals('test-region', $sdkOptions['region']);
+        $this->assertInstanceOf(GuzzleHttp\Psr7\Uri::class, $sdkOptions['endpoint']);
+        $this->assertEquals('https', $sdkOptions['endpoint']->getScheme());
+        $this->assertEquals('cb-123.oss-cloudbox.aliyuncs.com', $sdkOptions['endpoint']->getAuthority());
     }
 }
 
