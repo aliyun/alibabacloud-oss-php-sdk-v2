@@ -212,6 +212,14 @@ use AlibabaCloud\Oss\V2\Transform;
  * @method \GuzzleHttp\Promise\Promise putBucketPublicAccessBlockAsync(Models\PutBucketPublicAccessBlockRequest $request, array $args = []) Enables or disables Block Public Access for a bucket.
  * @method Models\DeleteBucketPublicAccessBlockResult deleteBucketPublicAccessBlock(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
  * @method \GuzzleHttp\Promise\Promise deleteBucketPublicAccessBlockAsync(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
+ * @method Models\PutStyleResult putStyle(Models\PutStyleRequest $request, array $args = []) Adds an image style to a bucket. An image style contains one or more image processing parameters.
+ * @method \GuzzleHttp\Promise\Promise putStyleAsync(Models\PutStyleRequest $request, array $args = []) Adds an image style to a bucket. An image style contains one or more image processing parameters.
+ * @method Models\ListStyleResult listStyle(Models\ListStyleRequest $request, array $args = []) Queries all image styles that are created for a bucket.
+ * @method \GuzzleHttp\Promise\Promise listStyleAsync(Models\ListStyleRequest $request, array $args = []) Queries all image styles that are created for a bucket.
+ * @method Models\GetStyleResult getStyle(Models\GetStyleRequest $request, array $args = []) Queries the information about an image style of a bucket.
+ * @method \GuzzleHttp\Promise\Promise getStyleAsync(Models\GetStyleRequest $request, array $args = []) Queries the information about an image style of a bucket.
+ * @method Models\DeleteStyleResult deleteStyle(Models\DeleteStyleRequest $request, array $args = []) Deletes an image style from a bucket.
+ * @method \GuzzleHttp\Promise\Promise deleteStyleAsync(Models\DeleteStyleRequest $request, array $args = []) Deletes an image style from a bucket.
  */
 final class Client
 {
