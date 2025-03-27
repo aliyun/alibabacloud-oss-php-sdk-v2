@@ -137,6 +137,13 @@ final class Functions
         'GetBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
         'PutBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
         'DeleteBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
+        // bucket replication
+        'PutBucketRtc' => 'BucketReplication',
+        'PutBucketReplication' => 'BucketReplication',
+        'GetBucketReplication' => 'BucketReplication',
+        'GetBucketReplicationLocation' => 'BucketReplication',
+        'GetBucketReplicationProgress' => 'BucketReplication',
+        'DeleteBucketReplication' => 'BucketReplication',
     ];
 
     public static function getTransformClass(string $apiName)
