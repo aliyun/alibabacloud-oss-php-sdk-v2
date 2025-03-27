@@ -7,7 +7,7 @@ namespace AlibabaCloud\Oss\V2;
 final class Defaults
 {
     /**
-     *Default transport 's connect timeout is 10, the unit is seconod 
+     *Default transport 's connect timeout is 10, the unit is seconod
      */
     const CONNECT_TIMEOUT = 10.0;
 
@@ -105,4 +105,9 @@ final class Defaults
      * Checkpoint file Magic
      */
     const CHECKPOINT_MAGIC = '92611BED-89E2-46B6-89E5-72F273D4B0A3';
+
+    /**
+     *  CloudBoxProduct Product of cloud box for signing
+     */
+    const CLOUD_BOX_PRODUCT = "oss-cloudbox";
 }

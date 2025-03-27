@@ -212,6 +212,8 @@ use AlibabaCloud\Oss\V2\Transform;
  * @method \GuzzleHttp\Promise\Promise putBucketPublicAccessBlockAsync(Models\PutBucketPublicAccessBlockRequest $request, array $args = []) Enables or disables Block Public Access for a bucket.
  * @method Models\DeleteBucketPublicAccessBlockResult deleteBucketPublicAccessBlock(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
  * @method \GuzzleHttp\Promise\Promise deleteBucketPublicAccessBlockAsync(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
+ * @method Models\ListCloudBoxesResult listCloudBoxes(Models\ListCloudBoxesRequest $request, array $args = []) Lists cloud box buckets that belong to the current account.
+ * @method \GuzzleHttp\Promise\Promise listCloudBoxesAsync(Models\ListCloudBoxesRequest $request, array $args = []) Lists cloud box buckets that belong to the current account.
  */
 final class Client
 {
