@@ -212,6 +212,20 @@ use AlibabaCloud\Oss\V2\Transform;
  * @method \GuzzleHttp\Promise\Promise putBucketPublicAccessBlockAsync(Models\PutBucketPublicAccessBlockRequest $request, array $args = []) Enables or disables Block Public Access for a bucket.
  * @method Models\DeleteBucketPublicAccessBlockResult deleteBucketPublicAccessBlock(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
  * @method \GuzzleHttp\Promise\Promise deleteBucketPublicAccessBlockAsync(Models\DeleteBucketPublicAccessBlockRequest $request, array $args = []) Deletes the Block Public Access configurations of a bucket.
+ * @method Models\ListAccessPointsResult listAccessPoints(Models\ListAccessPointsRequest $request, array $args = []) Queries the information about user-level or bucket-level access points.
+ * @method \GuzzleHttp\Promise\Promise listAccessPointsAsync(Models\ListAccessPointsRequest $request, array $args = []) Queries the information about user-level or bucket-level access points.
+ * @method Models\GetAccessPointResult getAccessPoint(Models\GetAccessPointRequest $request, array $args = []) Queries the information about an access point.
+ * @method \GuzzleHttp\Promise\Promise getAccessPointAsync(Models\GetAccessPointRequest $request, array $args = []) Queries the information about an access point.
+ * @method Models\GetAccessPointPolicyResult getAccessPointPolicy(Models\GetAccessPointPolicyRequest $request, array $args = []) Queries the configurations of an access point policy.
+ * @method \GuzzleHttp\Promise\Promise getAccessPointPolicyAsync(Models\GetAccessPointPolicyRequest $request, array $args = []) Queries the configurations of an access point policy.
+ * @method Models\DeleteAccessPointPolicyResult deleteAccessPointPolicy(Models\DeleteAccessPointPolicyRequest $request, array $args = []) Deletes an access point policy.
+ * @method \GuzzleHttp\Promise\Promise deleteAccessPointPolicyAsync(Models\DeleteAccessPointPolicyRequest $request, array $args = []) Deletes an access point policy.
+ * @method Models\PutAccessPointPolicyResult putAccessPointPolicy(Models\PutAccessPointPolicyRequest $request, array $args = []) Configures an access point policy.
+ * @method \GuzzleHttp\Promise\Promise putAccessPointPolicyAsync(Models\PutAccessPointPolicyRequest $request, array $args = []) Configures an access point policy.
+ * @method Models\DeleteAccessPointResult deleteAccessPoint(Models\DeleteAccessPointRequest $request, array $args = []) Deletes an access point.
+ * @method \GuzzleHttp\Promise\Promise deleteAccessPointAsync(Models\DeleteAccessPointRequest $request, array $args = []) Deletes an access point.
+ * @method Models\CreateAccessPointResult createAccessPoint(Models\CreateAccessPointRequest $request, array $args = []) Creates an access point.
+ * @method \GuzzleHttp\Promise\Promise createAccessPointAsync(Models\CreateAccessPointRequest $request, array $args = []) Creates an access point.
  */
 final class Client
 {

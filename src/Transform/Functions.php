@@ -137,6 +137,14 @@ final class Functions
         'GetBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
         'PutBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
         'DeleteBucketPublicAccessBlock' => 'BucketPublicAccessBlock',
+        // access point
+        'ListAccessPoints' => 'AccessPoint',
+        'GetAccessPoint' => 'AccessPoint',
+        'GetAccessPointPolicy' => 'AccessPoint',
+        'DeleteAccessPointPolicy' => 'AccessPoint',
+        'PutAccessPointPolicy' => 'AccessPoint',
+        'DeleteAccessPoint' => 'AccessPoint',
+        'CreateAccessPoint' => 'AccessPoint',
     ];
 
     public static function getTransformClass(string $apiName)
