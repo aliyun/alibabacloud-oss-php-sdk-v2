@@ -3,7 +3,6 @@
 namespace IntegrationTests;
 
 use AlibabaCloud\Oss\V2 as Oss;
-use GuzzleHttp\Client;
 
 class TestIntegration extends \PHPUnit\Framework\TestCase
 {
@@ -54,10 +53,13 @@ class TestIntegration extends \PHPUnit\Framework\TestCase
 
     public static function tearDownAfterClass(): void
     {
+        //clean access points
+        self::deleteAccessPoint(self::getDefaultClient(), self::$bucketName);
+
         //clean buckets
         self::cleanBucket(self::getDefaultClient(), self::$bucketName);
 
-        //clean buckets
+        //clean temp dir
         self::deleteDir(self::$tempDir);
     }
 
@@ -270,6 +272,69 @@ class TestIntegration extends \PHPUnit\Framework\TestCase
     public static function getDataPath(): string
     {
         return dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'Data';
+    }
+
+    public static function deleteAccessPoint(Oss\Client $client, string $bucketName): void
+    {
+        $listRequest = new Oss\Models\ListAccessPointsRequest();
+        $listRequest->bucket = $bucketName;
+        while (true) {
+            $listResult = $client->listAccessPoints($listRequest);
+            if (isset($listResult->listAccessPoints->accessPoints->accessPoints) && count($listResult->listAccessPoints->accessPoints->accessPoints) > 0) {
+                foreach ($listResult->listAccessPoints->accessPoints->accessPoints as $accessPoint) {
+                    switch ($accessPoint->status) {
+                        case 'creating':
+                            sleep(3);
+                            while (true) {
+                                $getResult = $client->getAccessPoint(new Oss\Models\GetAccessPointRequest(
+                                    $bucketName, $accessPoint->accessPointName
+                                ));
+                                if ($getResult->getAccessPoint->status != 'creating') {
+                                    break;
+                                } else {
+                                    sleep(3);
+                                }
+                            }
+                            $client->deleteAccessPoint(new Oss\Models\DeleteAccessPointRequest(
+                                $bucketName, $accessPoint->accessPointName
+                            ));
+                            break;
+                        case 'deleting':
+                            sleep(5);
+                            break;
+                        default:
+                            $client->deleteAccessPoint(new Oss\Models\DeleteAccessPointRequest(
+                                $bucketName, $accessPoint->accessPointName
+                            ));
+                            break;
+                    }
+                    while (true) {
+                        try {
+                            $client->getAccessPoint(new Oss\Models\GetAccessPointRequest(
+                                $bucketName, $accessPoint->accessPointName
+                            ));
+                        } catch (Oss\Exception\OperationException $e) {
+                            $se = $e->getPrevious();
+                            if ($se instanceof Oss\Exception\ServiceException) {
+                                if ($se->getErrorCode() == 'NoSuchAccessPoint' && $se->getStatusCode() == 404) {
+                                    break;
+                                }
+                            }
+                        }
+                        sleep(3);
+                    }
+
+                }
+                if ($listResult->listAccessPoints->isTruncated == false) {
+                    break;
+                }
+                if ($listResult->listAccessPoints->nextContinuationToken != "") {
+                    $listRequest->continuationToken = $listResult->listAccessPoints->nextContinuationToken;
+                }
+            } else {
+                break;
+            }
+        }
     }
 
     /**
