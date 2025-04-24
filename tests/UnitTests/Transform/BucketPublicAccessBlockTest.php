@@ -34,7 +34,7 @@ class BucketPublicAccessBlockTest extends \PHPUnit\Framework\TestCase
             true
         ));
         $input = BucketPublicAccessBlock::fromPutBucketPublicAccessBlock($request);
-        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('bucket-123', $this->cleanXml($input->getBucket()));
         $xml = <<<BBB
 <?xml version="1.0" encoding="UTF-8"?><PublicAccessBlockConfiguration><BlockPublicAccess>true</BlockPublicAccess></PublicAccessBlockConfiguration>
 BBB;
@@ -76,7 +76,7 @@ BBB;
 
         $request = new Models\GetBucketPublicAccessBlockRequest('bucket-123');
         $input = BucketPublicAccessBlock::fromGetBucketPublicAccessBlock($request);
-        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('bucket-123', $this->cleanXml($input->getBucket()));
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
     }
 
@@ -121,7 +121,7 @@ BBB;
 
         $request = new Models\DeleteBucketPublicAccessBlockRequest('bucket-123');
         $input = BucketPublicAccessBlock::fromDeleteBucketPublicAccessBlock($request);
-        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('bucket-123', $this->cleanXml($input->getBucket()));
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
     }
 

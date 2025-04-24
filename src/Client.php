@@ -274,6 +274,26 @@ use AlibabaCloud\Oss\V2\Transform;
  * @method \GuzzleHttp\Promise\Promise listBucketInventoryAsync(Models\ListBucketInventoryRequest $request, array $args = []) Queries all inventories in a bucket at a time.
  * @method Models\DeleteBucketInventoryResult deleteBucketInventory(Models\DeleteBucketInventoryRequest $request, array $args = []) Deletes an inventory for a bucket.
  * @method \GuzzleHttp\Promise\Promise deleteBucketInventoryAsync(Models\DeleteBucketInventoryRequest $request, array $args = []) Deletes an inventory for a bucket.
+ * @method Models\CreateAccessPointForObjectProcessResult createAccessPointForObjectProcess(Models\CreateAccessPointForObjectProcessRequest $request, array $args = []) Creates an Object FC Access Point.
+ * @method \GuzzleHttp\Promise\Promise createAccessPointForObjectProcessAsync(Models\CreateAccessPointForObjectProcessRequest $request, array $args = []) Creates an Object FC Access Point.
+ * @method Models\GetAccessPointForObjectProcessResult getAccessPointForObjectProcess(Models\GetAccessPointForObjectProcessRequest $request, array $args = []) Queries basic information about an Object FC Access Point.
+ * @method \GuzzleHttp\Promise\Promise getAccessPointForObjectProcessAsync(Models\GetAccessPointForObjectProcessRequest $request, array $args = []) Queries basic information about an Object FC Access Point.
+ * @method Models\ListAccessPointsForObjectProcessResult listAccessPointsForObjectProcess(Models\ListAccessPointsForObjectProcessRequest $request, array $args = []) Lists information about Object FC Access Points in an Alibaba Cloud account.
+ * @method \GuzzleHttp\Promise\Promise listAccessPointsForObjectProcessAsync(Models\ListAccessPointsForObjectProcessRequest $request, array $args = []) Lists information about Object FC Access Points in an Alibaba Cloud account.
+ * @method Models\DeleteAccessPointForObjectProcessResult deleteAccessPointForObjectProcess(Models\DeleteAccessPointForObjectProcessRequest $request, array $args = []) Deletes an Object FC Access Point.
+ * @method \GuzzleHttp\Promise\Promise deleteAccessPointForObjectProcessAsync(Models\DeleteAccessPointForObjectProcessRequest $request, array $args = []) Deletes an Object FC Access Point.
+ * @method Models\GetAccessPointConfigForObjectProcessResult getAccessPointConfigForObjectProcess(Models\GetAccessPointConfigForObjectProcessRequest $request, array $args = []) Queries the configurations of an Object FC Access Point.
+ * @method \GuzzleHttp\Promise\Promise getAccessPointConfigForObjectProcessAsync(Models\GetAccessPointConfigForObjectProcessRequest $request, array $args = []) Queries the configurations of an Object FC Access Point.
+ * @method Models\PutAccessPointConfigForObjectProcessResult putAccessPointConfigForObjectProcess(Models\PutAccessPointConfigForObjectProcessRequest $request, array $args = []) Changes the configurations of an Object FC Access Point.
+ * @method \GuzzleHttp\Promise\Promise putAccessPointConfigForObjectProcessAsync(Models\PutAccessPointConfigForObjectProcessRequest $request, array $args = []) Changes the configurations of an Object FC Access Point.
+ * @method Models\PutAccessPointPolicyForObjectProcessResult putAccessPointPolicyForObjectProcess(Models\PutAccessPointPolicyForObjectProcessRequest $request, array $args = []) Configures policies for an Object FC Access Point.
+ * @method \GuzzleHttp\Promise\Promise putAccessPointPolicyForObjectProcessAsync(Models\PutAccessPointPolicyForObjectProcessRequest $request, array $args = []) Configures policies for an Object FC Access Point.
+ * @method Models\GetAccessPointPolicyForObjectProcessResult getAccessPointPolicyForObjectProcess(Models\GetAccessPointPolicyForObjectProcessRequest $request, array $args = []) Queries the policies of an Object FC Access Point.
+ * @method \GuzzleHttp\Promise\Promise getAccessPointPolicyForObjectProcessAsync(Models\GetAccessPointPolicyForObjectProcessRequest $request, array $args = []) Queries the policies of an Object FC Access Point.
+ * @method Models\DeleteAccessPointPolicyForObjectProcessResult deleteAccessPointPolicyForObjectProcess(Models\DeleteAccessPointPolicyForObjectProcessRequest $request, array $args = []) Deletes the policies of an Object FC Access Point.
+ * @method \GuzzleHttp\Promise\Promise deleteAccessPointPolicyForObjectProcessAsync(Models\DeleteAccessPointPolicyForObjectProcessRequest $request, array $args = []) Deletes the policies of an Object FC Access Point.
+ * @method Models\WriteGetObjectResponseResult writeGetObjectResponse(Models\WriteGetObjectResponseRequest $request, array $args = []) WriteGetObjectResponse Customize return data and response headers
+ * @method \GuzzleHttp\Promise\Promise writeGetObjectResponseAsync(Models\WriteGetObjectResponseRequest $request, array $args = []) WriteGetObjectResponse Customize return data and response headers
  */
 final class Client
 {

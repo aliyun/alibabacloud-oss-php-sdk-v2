@@ -100,7 +100,7 @@ final class GetAccessPoint extends Model
      * @param string|null $status The status of the access point.
      * @param string|null $bucket The name of the bucket for which the access point is configured.
      * @param string|null $accountId The ID of the Alibaba Cloud account for which the access point is configured.
-     * @param Endpoints|null $endpoints The container that stores the network origin information about the access point.
+     * @param AccessPointEndpoints|null $endpoints The container that stores the network origin information about the access point.
      * @param PublicAccessBlockConfiguration|null $publicAccessBlockConfiguration The container that stores the Block Public Access configurations.
      * @param string|null $creationDate The time when the access point was created.
      * @param string|null $accessPointName The name of the access point.
@@ -113,7 +113,7 @@ final class GetAccessPoint extends Model
         ?string $status = null,
         ?string $bucket = null,
         ?string $accountId = null,
-        ?Endpoints $endpoints = null,
+        ?AccessPointEndpoints $endpoints = null,
         ?PublicAccessBlockConfiguration $publicAccessBlockConfiguration = null,
         ?string $creationDate = null,
         ?string $accessPointName = null,

@@ -176,6 +176,17 @@ final class Functions
         'GetBucketInventory' => 'BucketInventory',
         'ListBucketInventory' => 'BucketInventory',
         'DeleteBucketInventory' => 'BucketInventory',
+        // bucket object fc access point
+        'CreateAccessPointForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'GetAccessPointForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'ListAccessPointsForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'DeleteAccessPointForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'GetAccessPointConfigForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'PutAccessPointConfigForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'PutAccessPointPolicyForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'GetAccessPointPolicyForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'DeleteAccessPointPolicyForObjectProcess' => 'BucketObjectFcAccessPoint',
+        'WriteGetObjectResponse' => 'BucketObjectFcAccessPoint',
     ];
 
     public static function getTransformClass(string $apiName)
