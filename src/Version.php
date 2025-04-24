@@ -10,5 +10,5 @@ namespace AlibabaCloud\Oss\V2;
  */
 final class Version
 {
-    public const VERSION = '0.2.1';
+    public const VERSION = '0.3.0';
 }
