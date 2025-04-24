@@ -54,7 +54,9 @@ class TestIntegration extends \PHPUnit\Framework\TestCase
     public static function tearDownAfterClass(): void
     {
         //clean access points
-        self::deleteAccessPoint(self::getDefaultClient(), self::$bucketName);
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {        
+            self::deleteAccessPoint(self::getDefaultClient(), self::$bucketName);
+        }
 
         //clean buckets
         self::cleanBucket(self::getDefaultClient(), self::$bucketName);
