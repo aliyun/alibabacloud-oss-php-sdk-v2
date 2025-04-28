@@ -9,11 +9,11 @@ use AlibabaCloud\Oss\V2\Annotation\XmlElement;
 use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 
 /**
- * Class OSSTagging
+ * Class MetaQueryOssTagging
  * @package AlibabaCloud\Oss\V2\Models
  */
 #[XmlRoot(name: 'OSSTagging')]
-final class OSSTagging extends Model
+final class MetaQueryOssTagging extends Model
 {
     /**
      * @var array<MetaQueryTagging>|null
@@ -22,7 +22,7 @@ final class OSSTagging extends Model
     public ?array $taggings;
 
     /**
-     * MetaQueryTagging constructor.
+     * MetaQueryOssTagging constructor.
      * @param array<MetaQueryTagging>|null $taggings
      */
     public function __construct(

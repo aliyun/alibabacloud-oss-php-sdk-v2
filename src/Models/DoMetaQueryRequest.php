@@ -31,19 +31,29 @@ final class DoMetaQueryRequest extends RequestModel
     public ?MetaQuery $metaQuery;
 
     /**
+     * Specifies that MetaSearch is used to query objects.
+     * @var string|null
+     */
+    #[TagProperty(tag: '', position: 'query', rename: 'mode', type: 'string')]
+    public ?string $mode;
+
+    /**
      * DoMetaQueryRequest constructor.
      * @param string|null $bucket The name of the bucket.
      * @param MetaQuery|null $metaQuery The request body schema.
+     * @param string|null $mode Specifies that MetaSearch is used to query objects.
      * @param array|null $options
      */
     public function __construct(
         ?string $bucket = null,
         ?MetaQuery $metaQuery = null,
+        ?string $mode = null,
         ?array $options = null
     )
     {
         $this->bucket = $bucket;
         $this->metaQuery = $metaQuery;
+        $this->mode = $mode;
         parent::__construct($options);
     }
 }

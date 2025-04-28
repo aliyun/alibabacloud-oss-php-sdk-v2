@@ -37,6 +37,8 @@ if (isset($options["endpoint"])) {
 }
 
 $client = new Oss\Client($cfg);
+
+// case 1: meta search
 $request = new Oss\Models\OpenMetaQueryRequest($bucket);
 $result = $client->openMetaQuery($request);
 
@@ -44,3 +46,12 @@ printf(
     'status code:' . $result->statusCode . PHP_EOL .
     'request id:' . $result->requestId
 );
+
+// case 2: ai search
+//$request = new Oss\Models\OpenMetaQueryRequest($bucket,'semantic');
+//$result = $client->openMetaQuery($request);
+//
+//printf(
+//    'status code:' . $result->statusCode . PHP_EOL .
+//    'request id:' . $result->requestId
+//);

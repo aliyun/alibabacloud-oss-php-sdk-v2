@@ -62,6 +62,32 @@ class ClientBucketMetaQueryTest extends TestIntegration
         $this->assertEquals('OK', $closeResult->status);
         $this->assertEquals(True, count($closeResult->headers) > 0);
         $this->assertEquals(24, strlen($closeResult->requestId));
+
+        $bucketNameAiSearch = self::$BUCKETNAME_PREFIX . strval(rand(0, 100)) . '-' . strval(time()) . '-semantic';
+        $client->putBucket(new Oss\Models\PutBucketRequest($bucketNameAiSearch));
+        // OpenMetaQuery with semantic
+        $putResult = $client->openMetaQuery(new Oss\Models\OpenMetaQueryRequest(
+            $bucketNameAiSearch, 'semantic'
+        ));
+        $this->assertEquals(200, $putResult->statusCode);
+        $this->assertEquals('OK', $putResult->status);
+        $this->assertEquals(True, count($putResult->headers) > 0);
+        $this->assertEquals(24, strlen($putResult->requestId));
+
+        // DoMetaQuery with semantic
+        $request = new Oss\Models\DoMetaQueryRequest($bucketNameAiSearch, new Oss\Models\MetaQuery(
+            maxResults: 99,
+            query: "Overlook the snow-covered forest",
+            mediaTypes: new Oss\Models\MetaQueryMediaTypes('image'),
+            simpleQuery: '{"Operation":"gt", "Field": "Size", "Value": "30"}',
+        ), 'semantic');
+        $doResult = $client->doMetaQuery($request);
+        $this->assertEquals(200, $doResult->statusCode);
+        $this->assertEquals('OK', $doResult->status);
+        $this->assertEquals(True, count($doResult->headers) > 0);
+        $this->assertEquals(24, strlen($doResult->requestId));
+
+        $client->deleteBucket(new Oss\Models\DeleteBucketRequest($bucketNameAiSearch));
     }
 
     public function testBucketMetaQueryFail()

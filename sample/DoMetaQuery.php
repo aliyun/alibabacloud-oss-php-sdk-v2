@@ -37,6 +37,8 @@ if (isset($options["endpoint"])) {
 }
 
 $client = new Oss\Client($cfg);
+
+// case 1:meta search
 $request = new \AlibabaCloud\Oss\V2\Models\DoMetaQueryRequest($bucket, new \AlibabaCloud\Oss\V2\Models\MetaQuery(
     maxResults: 5,
     query: "{'Field': 'Size','Value': '1048576','Operation': 'gt'}",
@@ -61,3 +63,18 @@ printf(
     'request id:' . $result->requestId . PHP_EOL .
     'result:' . var_export($result, true)
 );
+
+// case 2: ai search
+/*$request = new Oss\Models\DoMetaQueryRequest($bucket, new Oss\Models\MetaQuery(
+    maxResults: 99,
+    query: "Overlook the snow-covered forest",
+    mediaTypes: new Oss\Models\MetaQueryMediaTypes('image'),
+    simpleQuery: '{"Operation":"gt", "Field": "Size", "Value": "30"}',
+), 'semantic');
+
+$result = $client->doMetaQuery($request);
+printf(
+    'status code:' . $result->statusCode . PHP_EOL .
+    'request id:' . $result->requestId . PHP_EOL .
+    'result:' . var_export($result, true)
+);*/

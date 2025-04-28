@@ -37,19 +37,29 @@ final class MetaQueryAggregation extends Model
     public ?int $value;
 
     /**
+     * The grouped aggregations.
+     * @var MetaQueryGroups|null
+     */
+    #[XmlElement(rename: 'Groups', type: MetaQueryGroups::class)]
+    public ?MetaQueryGroups $groups;
+
+    /**
      * MetaQueryAggregation constructor.
      * @param string|null $field The field name.
      * @param string|null $operation The operator for aggregate operations.
      * @param int|null $value The result of the aggregate operation.
+     * @param MetaQueryGroups|null $groups The result of the aggregate operation.
      */
     public function __construct(
         ?string $field = null,
         ?string $operation = null,
-        ?int $value = null
+        ?int $value = null,
+        ?MetaQueryGroups $groups = null
     )
     {
         $this->field = $field;
         $this->operation = $operation;
         $this->value = $value;
+        $this->groups = $groups;
     }
 }

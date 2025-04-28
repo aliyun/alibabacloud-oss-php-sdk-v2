@@ -59,6 +59,20 @@ final class MetaQuery extends Model
     public ?string $nextToken;
 
     /**
+     * The type of multimedia that you want to query.
+     * @var MetaQueryMediaTypes|null
+     */
+    #[XmlElement(rename: 'MediaTypes', type: MetaQueryMediaTypes::class)]
+    public ?MetaQueryMediaTypes $mediaType;
+
+    /**
+     * The query conditions
+     * @var string|null
+     */
+    #[XmlElement(rename: 'SimpleQuery', type: 'string')]
+    public ?string $simpleQuery;
+
+    /**
      * MetaQuery constructor.
      * @param int|null $maxResults The maximum number of objects to return.
      * @param string|null $query The query conditions.
@@ -66,6 +80,8 @@ final class MetaQuery extends Model
      * @param string|null $order The sort order.
      * @param MetaQueryAggregations|null $aggregations The container that stores the information about aggregate operations.
      * @param string|null $nextToken The pagination token used to obtain information in the next request.
+     * @param MetaQueryMediaTypes|null $mediaTypes The type of multimedia that you want to query.
+     * @param string|null $simpleQuery The query conditions.
      */
     public function __construct(
         ?int $maxResults = null,
@@ -73,7 +89,9 @@ final class MetaQuery extends Model
         ?string $sort = null,
         ?string $order = null,
         ?MetaQueryAggregations $aggregations = null,
-        ?string $nextToken = null
+        ?string $nextToken = null,
+        ?MetaQueryMediaTypes $mediaTypes = null,
+        ?string $simpleQuery = null
     )
     {
         $this->maxResults = $maxResults;
@@ -82,5 +100,7 @@ final class MetaQuery extends Model
         $this->order = $order;
         $this->aggregations = $aggregations;
         $this->nextToken = $nextToken;
+        $this->mediaType = $mediaTypes;
+        $this->simpleQuery = $simpleQuery;
     }
 }
