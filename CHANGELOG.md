@@ -1,20 +1,25 @@
 # ChangeLog - Alibaba Cloud OSS SDK for PHP v2
+## 版本号：0.3.1 日期：2025-06-13
+### 变更内容
+- Update：Meta query api supports more search condition settings
+- Update：Api-level options supports credentials_provider
+ 
 ## 版本号：0.3.0 日期：2025-04-24
 ### 变更内容
-- Feature：add bucket inventory api
-- Feature：add bucket style api
-- Feature：add bucket resource group api
-- Feature：add bucket https config api
-- Feature：add bucket redundancy transition api
-- Feature：add list cloud boxes api and add cloud box id param
-- Feature：add bucket replication api
-- Feature：add access point api
+- Feature：Add bucket inventory api
+- Feature：Add bucket style api
+- Feature：Add bucket resource group api
+- Feature：Add bucket https config api
+- Feature：Add bucket redundancy transition api
+- Feature：Add list cloud boxes api and add cloud box id param
+- Feature：Add bucket replication api
+- Feature：Add access point api
 
 ## 版本号：0.2.1 日期：2025-03-18
 ### 变更内容
-- Fix：add a default content-type if possible.
-- Fix：use end() to get last error
-- Fix：compatibility with php 8.0
+- Fix：Add a default content-type if possible.
+- Fix：Use end() to get last error
+- Fix：Compatibility with php 8.0
 
 ## 版本号：0.2.0 日期：2025-02-27
 ### 变更内容
