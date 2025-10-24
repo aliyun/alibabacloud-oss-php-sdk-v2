@@ -33,6 +33,27 @@ class ClientBucketAccessMonitorTest extends TestIntegration
         $this->assertEquals('OK', $getResult->status);
         $this->assertEquals(True, count($getResult->headers) > 0);
         $this->assertEquals(24, strlen($getResult->requestId));
+
+        $putResult = $client->putBucketAccessMonitor(new Oss\Models\PutBucketAccessMonitorRequest(
+            $bucketName,
+            new Oss\Models\AccessMonitorConfiguration(
+                status: Oss\Models\AccessMonitorStatusType::ENABLED, allowCopy: true
+            )
+        ));
+        $this->assertEquals(200, $putResult->statusCode);
+        $this->assertEquals('OK', $putResult->status);
+        $this->assertEquals(True, count($putResult->headers) > 0);
+        $this->assertEquals(24, strlen($putResult->requestId));
+
+        $getResult = $client->getBucketAccessMonitor(new Oss\Models\GetBucketAccessMonitorRequest(
+            $bucketName
+        ));
+        $this->assertEquals(200, $getResult->statusCode);
+        $this->assertEquals('OK', $getResult->status);
+        $this->assertEquals(True, count($getResult->headers) > 0);
+        $this->assertEquals(24, strlen($getResult->requestId));
+        $this->assertEquals(Oss\Models\AccessMonitorStatusType::ENABLED, $getResult->accessMonitorConfiguration->status);
+        $this->assertEquals(true, $getResult->accessMonitorConfiguration->allowCopy);
     }
 
     public function testBucketAccessMonitorFail()

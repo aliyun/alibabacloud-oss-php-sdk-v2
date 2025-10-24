@@ -45,3 +45,10 @@ printf(
     'request id:' . $result->requestId . PHP_EOL .
     'access monitor status:' . $result->accessMonitorConfiguration->status
 );
+
+if ($result->accessMonitorConfiguration->allowCopy) {
+    printf(
+        PHP_EOL .
+        'access monitor allow copy:' . var_export($result->accessMonitorConfiguration->allowCopy, true)
+    );
+}

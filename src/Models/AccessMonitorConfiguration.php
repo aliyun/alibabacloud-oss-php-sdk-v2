@@ -24,13 +24,23 @@ final class AccessMonitorConfiguration extends Model
     public ?string $status;
 
     /**
+     * Only effective when Status is Enabled, indicating whether it supports updating the source data's LastAccesstime when CopyObject/UploadPartCopy is used.
+     * @var bool|null
+     */
+    #[XmlElement(rename: 'AllowCopy', type: 'bool')]
+    public ?bool $allowCopy;
+
+    /**
      * AccessMonitorConfiguration constructor.
      * @param string|null $status The access tracking status of the bucket.
+     * @param bool|null $allowCopy Only effective when Status is Enabled, indicating whether it supports updating the source data's LastAccesstime when CopyObject/UploadPartCopy is used
      */
     public function __construct(
-        ?string $status = null
+        ?string $status = null,
+        ?bool $allowCopy = null
     )
     {
         $this->status = $status;
+        $this->allowCopy = $allowCopy;
     }
 }

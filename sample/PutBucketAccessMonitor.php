@@ -38,7 +38,7 @@ if (isset($options["endpoint"])) {
 
 $client = new Oss\Client($cfg);
 $request = new Oss\Models\PutBucketAccessMonitorRequest($bucket, new Oss\Models\AccessMonitorConfiguration(
-    status: Oss\Models\AccessMonitorStatusType::ENABLED
+    status: Oss\Models\AccessMonitorStatusType::ENABLED, allowCopy: true
 ));
 $result = $client->putBucketAccessMonitor($request);
 

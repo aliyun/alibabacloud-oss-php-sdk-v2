@@ -37,6 +37,16 @@ class BucketAccessMonitorTest extends \PHPUnit\Framework\TestCase
 <?xml version="1.0" encoding="UTF-8"?><AccessMonitorConfiguration><Status>Enabled</Status></AccessMonitorConfiguration>
 BBB;
         $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
+
+        $request = new Models\PutBucketAccessMonitorRequest('bucket-123', new Models\AccessMonitorConfiguration(
+            status: Models\AccessMonitorStatusType::ENABLED, allowCopy: true
+        ));
+        $input = BucketAccessMonitor::fromPutBucketAccessMonitor($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $xml = <<<BBB
+<?xml version="1.0" encoding="UTF-8"?><AccessMonitorConfiguration><Status>Enabled</Status><AllowCopy>true</AllowCopy></AccessMonitorConfiguration>
+BBB;
+        $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
     }
 
     public function testToPutBucketAccessMonitor()
@@ -106,6 +116,26 @@ BBB;
         $this->assertEquals(1, count($result->headers));
         $this->assertEquals('123', $result->headers['x-oss-request-id']);
         $this->assertEquals(Models\AccessMonitorStatusType::ENABLED, $result->accessMonitorConfiguration->status);
+
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+<AccessMonitorConfiguration>
+ <Status>Enabled</Status>
+ <AllowCopy>true</AllowCopy>
+</AccessMonitorConfiguration>';
+        $output = new OperationOutput(
+            'OK',
+            200,
+            ['x-oss-request-id' => '123'],
+            Utils::streamFor($body)
+        );
+        $result = BucketAccessMonitor::toGetBucketAccessMonitor($output);
+        $this->assertEquals('OK', $result->status);
+        $this->assertEquals(200, $result->statusCode);
+        $this->assertEquals('123', $result->requestId);
+        $this->assertEquals(1, count($result->headers));
+        $this->assertEquals('123', $result->headers['x-oss-request-id']);
+        $this->assertEquals(Models\AccessMonitorStatusType::ENABLED, $result->accessMonitorConfiguration->status);
+        $this->assertEquals(true, $result->accessMonitorConfiguration->allowCopy);
     }
 
     private function cleanXml($xml): array|string
