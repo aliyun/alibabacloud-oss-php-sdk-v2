@@ -32,5 +32,8 @@ jobs:
       - name: Install dependencies
         run: composer install --ansi --prefer-dist --no-interaction --no-progress
 
+      - name: List suites
+        run: vendor/bin/phpunit --list-suites
+
       - name: Run PHPUnit
         run: vendor/bin/phpunit --testsuite UnitTest --display-incomplete --display-skipped --display-deprecations --display-errors --display-notices --display-warnings
