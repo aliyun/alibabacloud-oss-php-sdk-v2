@@ -25,7 +25,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           extensions: bz2, curl, fileinfo, mbstring, exif, openssl, zip
-          coverage: none
+          coverage: xdebug
 
       - uses: actions/checkout@v5
 
