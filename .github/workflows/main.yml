@@ -39,4 +39,4 @@ jobs:
         run: vendor/bin/phpunit -h
 
       - name: Run PHPUnit
-        run: vendor/bin/phpunit --testsuite UnitTest --display-skipped --display-deprecations --display-errors
+        run: vendor/bin/phpunit --testsuite UnitTest --fail-on-warning --fail-on-incomplete -fail-on-risky
