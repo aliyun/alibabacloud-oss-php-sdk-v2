@@ -38,8 +38,8 @@ jobs:
       - name: Run PHPUnit help
         run: vendor/bin/phpunit -h
 
-      #- name: migrate-configuration
-      #  run: vendor/bin/phpunit --migrate-configuration
+      - name: migrate-configuration
+        run: vendor/bin/phpunit --migrate-configuration
         
       - name: Run PHPUnit
         run: vendor/bin/phpunit --testsuite UnitTest --fail-on-warning --fail-on-incomplete --fail-on-risky
