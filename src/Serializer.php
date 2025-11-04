@@ -19,7 +19,7 @@ final class Serializer
     {
         $writer = new \XMLWriter();
         $writer->openMemory();
-        $writer->startDocument('1.0', 'utf8');
+        $writer->startDocument('1.0', 'UTF-8');
         self::serializeXmlModel($writer, $root, $model);
         $writer->endDocument();
         return $writer->flush();
