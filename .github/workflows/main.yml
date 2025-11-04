@@ -65,3 +65,34 @@ jobs:
       - name: Run PHPUnit
         run: vendor/bin/phpunit --testsuite UnitTest --fail-on-warning --fail-on-incomplete --fail-on-risky
 
+  phpunit-macOS :
+    name: PHPUnit-macOS
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '7.4'
+          - '8.0'
+          - '8.3'
+          - '8.4'
+    steps:
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: bz2, curl, fileinfo, mbstring, exif, openssl, zip
+          coverage: xdebug
+
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: composer install --ansi --prefer-dist --no-interaction --no-progress
+
+      - name: PHPUnit Migrate Configuration
+        if: ${{ matrix.php-version != '7.4' && matrix.php-version != '8.0'}}
+        run: vendor/bin/phpunit --migrate-configuration
+        
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --testsuite UnitTest --fail-on-warning --fail-on-incomplete --fail-on-risky
+
