@@ -32,13 +32,14 @@ jobs:
       - name: Install dependencies
         run: composer install --ansi --prefer-dist --no-interaction --no-progress
 
-      - name: List suites
-        run: vendor/bin/phpunit --list-suites
+      #- name: List suites
+      #  run: vendor/bin/phpunit --list-suites
 
-      - name: Run PHPUnit help
-        run: vendor/bin/phpunit -h
+      #- name: Run PHPUnit help
+      #  run: vendor/bin/phpunit -h
 
       - name: migrate-configuration
+        if: ${{ matrix.php-version }} != '7.4' && ${{ matrix.php-version }} != '8.0'
         run: vendor/bin/phpunit --migrate-configuration
         
       - name: Run PHPUnit
