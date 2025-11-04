@@ -1,0 +1,36 @@
+name: main
+on: 
+    push:
+        branches:
+            - master
+            - dev-ci
+    pull_request:
+jobs:
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '7.4'
+          - '8.0'
+          - '8.1'
+          - '8.2'
+          - '8.3'
+          - '8.4'
+    steps:
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: libxml, mbstring, zip, zlib
+          coverage: none
+
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: composer install --ansi --prefer-dist --no-interaction --no-progress
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --testsuite UnitTest --display-incomplete --display-skipped --display-deprecations --display-errors --display-notices --display-warnings
