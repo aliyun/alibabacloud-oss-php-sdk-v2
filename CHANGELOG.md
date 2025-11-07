@@ -1,4 +1,13 @@
 # ChangeLog - Alibaba Cloud OSS SDK for PHP v2
+## 版本号：0.3.2 日期：2025-11-07
+### 变更内容
+- Update: ListBuckets api supports more parameters
+- Update: Routing rule supports more parameters
+- Update: Bucket logging supports more parameters
+- Update: Bucket https configuration supports more parameters
+- Update: Normalize parameter naming
+- Fix：Rename bucket request payment class name
+
 ## 版本号：0.3.1 日期：2025-06-13
 ### 变更内容
 - Update：Meta query api supports more search condition settings
