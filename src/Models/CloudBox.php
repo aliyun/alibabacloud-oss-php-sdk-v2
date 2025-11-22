@@ -62,7 +62,7 @@ final class CloudBox extends ResultModel
         ?string $name = null,
         ?string $region = null,
         ?string $controlEndpoint = null,
-        ?string $dataEndpoint = null,
+        ?string $dataEndpoint = null
     )
     {
         $this->id = $id;

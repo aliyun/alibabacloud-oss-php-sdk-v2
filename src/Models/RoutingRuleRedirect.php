@@ -359,7 +359,7 @@ final class RoutingRuleRedirect extends Model
         ?MirrorTaggings $mirrorTaggings = null,
         ?MirrorReturnHeaders $mirrorReturnHeaders = null,
         ?MirrorAuth $mirrorAuth = null,
-        ?MirrorMultiAlternates $mirrorMultiAlternates = null,
+        ?MirrorMultiAlternates $mirrorMultiAlternates = null
     )
     {
         $this->mirrorPassOriginalSlashes = $mirrorPassOriginalSlashes;

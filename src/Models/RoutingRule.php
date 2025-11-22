@@ -53,7 +53,7 @@ final class RoutingRule extends Model
         ?RoutingRuleRedirect $redirect = null,
         ?int $ruleNumber = null,
         ?RoutingRuleCondition $condition = null,
-        ?RoutingRuleLuaConfig $luaConfig = null,
+        ?RoutingRuleLuaConfig $luaConfig = null
     )
     {
         $this->redirect = $redirect;

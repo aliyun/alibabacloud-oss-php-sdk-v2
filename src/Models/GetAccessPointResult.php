@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AlibabaCloud\Oss\V2\Models;
 
 use AlibabaCloud\Oss\V2\Annotation\TagBody;
-use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 use AlibabaCloud\Oss\V2\Types\ResultModel;
 
 /**
@@ -26,7 +25,7 @@ final class GetAccessPointResult extends ResultModel
      * @param GetAccessPoint|null $getAccessPoint The container that stores the information about access point.
      */
     public function __construct(
-        ?GetAccessPoint $getAccessPoint = null,
+        ?GetAccessPoint $getAccessPoint = null
     )
     {
         $this->getAccessPoint = $getAccessPoint;

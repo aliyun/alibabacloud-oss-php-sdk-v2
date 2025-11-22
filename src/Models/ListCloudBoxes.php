@@ -83,7 +83,7 @@ final class ListCloudBoxes extends Model
         ?bool $isTruncated = null,
         ?string $nextMarker = null,
         ?Owner $owner = null,
-        ?CloudBoxes $cloudBoxes = null,
+        ?CloudBoxes $cloudBoxes = null
     )
     {
         $this->prefix = $prefix;

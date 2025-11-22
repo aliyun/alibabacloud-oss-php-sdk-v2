@@ -25,7 +25,7 @@ final class ListCloudBoxesResult extends ResultModel
      * @param ListCloudBoxes|null $listCloudBoxes The container that stores information about cloud box bucket.
      */
     public function __construct(
-        ?ListCloudBoxes $listCloudBoxes = null,
+        ?ListCloudBoxes $listCloudBoxes = null
     )
     {
         $this->listCloudBoxes = $listCloudBoxes;

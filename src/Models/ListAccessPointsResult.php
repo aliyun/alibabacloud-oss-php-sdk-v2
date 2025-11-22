@@ -25,7 +25,7 @@ final class ListAccessPointsResult extends ResultModel
      * @param ListAccessPoints|null $listAccessPoints The container that stores the information about all access points.
      */
     public function __construct(
-        ?ListAccessPoints $listAccessPoints = null,
+        ?ListAccessPoints $listAccessPoints = null
     )
     {
         $this->listAccessPoints = $listAccessPoints;

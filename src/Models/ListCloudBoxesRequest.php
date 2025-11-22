@@ -46,7 +46,7 @@ final class ListCloudBoxesRequest extends RequestModel
         ?string $marker = null,
         ?int $maxKeys = null,
         ?string $prefix = null,
-        ?array $options = null,
+        ?array $options = null
     )
     {
         $this->marker = $marker;
