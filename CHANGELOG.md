@@ -1,4 +1,11 @@
 # ChangeLog - Alibaba Cloud OSS SDK for PHP v2
+
+## 版本号：0.4.0 日期：2025-12-25
+### 变更内容
+- Feature: Add seal append object api
+- Feature: Add bucket overwrite config api
+- Break Change: Change the name and type of LifecycleRuleFilter.not
+
 ## 版本号：0.3.2 日期：2025-11-07
 ### 变更内容
 - Update: ListBuckets api supports more parameters
