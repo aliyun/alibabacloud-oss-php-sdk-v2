@@ -44,35 +44,61 @@ $request = new Oss\Models\PutBucketInventoryRequest(
     $bucket,
     inventoryId: $inventoryId,
     inventoryConfiguration: new Oss\Models\InventoryConfiguration(
-    isEnabled: true,
-    destination: new Oss\Models\InventoryDestination(
-    ossBucketDestination: new Oss\Models\InventoryOSSBucketDestination(
-        bucket: 'acs:oss:::' . $bucket,
-        prefix: 'prefix1',
-        format: Oss\Models\InventoryFormatType::CSV,
-        accountId: $accountId,
-        roleArn: 'acs:ram::' . $accountId . ':role/AliyunOSSRole'
-    )
-),
-    schedule: new Oss\Models\InventorySchedule(
-    frequency: Oss\Models\InventoryFrequencyType::DAILY
-),
-    filter: new Oss\Models\InventoryFilter(
-    prefix: 'filterPrefix',
-    lastModifyBeginTimeStamp: 1637883649,
-    lastModifyEndTimeStamp: 1638347592,
-    lowerSizeBound: 1024,
-    upperSizeBound: 1048576,
-    storageClass: 'Standard,IA'
-),
-    includedObjectVersions: 'All',
-    optionalFields: new Oss\Models\OptionalFields(
-    fields: array(
-        Oss\Models\InventoryOptionalFieldType::STORAGE_CLASS
-    )
-),
-    id: $inventoryId
-));
+        isEnabled: true,
+        destination: new Oss\Models\InventoryDestination(
+            ossBucketDestination: new Oss\Models\InventoryOSSBucketDestination(
+                bucket: 'acs:oss:::' . $bucket,
+                prefix: 'prefix1',
+                format: Oss\Models\InventoryFormatType::CSV,
+                accountId: $accountId,
+                roleArn: 'acs:ram::' . $accountId . ':role/AliyunOSSRole'
+            )
+        ),
+        schedule: new Oss\Models\InventorySchedule(
+            frequency: Oss\Models\InventoryFrequencyType::DAILY
+        ),
+        filter: new Oss\Models\InventoryFilter(
+            prefix: 'filterPrefix',
+            lastModifyBeginTimeStamp: 1637883649,
+            lastModifyEndTimeStamp: 1638347592,
+            lowerSizeBound: 1024,
+            upperSizeBound: 1048576,
+            storageClass: 'Standard,IA'
+        ),
+        includedObjectVersions: 'All',
+        optionalFields: new Oss\Models\OptionalFields(
+            fields: array(
+                Oss\Models\InventoryOptionalFieldType::STORAGE_CLASS
+            )
+        ),
+        id: $inventoryId,
+    // Incremental Inventory
+//        incrementalInventory: new Oss\Models\IncrementalInventory(
+//            isEnabled: true,
+//            schedule: new Oss\Models\IncrementInventorySchedule(
+//                frequency: 600,
+//            ),
+//            optionalFields: new Oss\Models\IncrementalInventoryOptionalFields(
+//                [
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::SEQUENCE_NUMBER,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::RECORD_TYPE,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::RECORD_TIMESTAMP,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::REQUESTER,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::SOURCE_IP,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::REQUEST_ID,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::SIZE,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::STORAGE_CLASS,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::LAST_MODIFIED_DATE,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::ETAG,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::IS_MULTIPART_UPLOADED,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::OBJECT_TYPE,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::OBJECT_ACL,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::CRC64,
+//                    Oss\Models\IncrementalInventoryOptionalFieldType::ENCRYPTION_STATUS
+//                ]
+//            )
+//        ),
+    ));
 $result = $client->putBucketInventory($request);
 
 printf(

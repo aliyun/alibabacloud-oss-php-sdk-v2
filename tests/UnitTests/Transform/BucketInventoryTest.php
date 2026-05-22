@@ -40,42 +40,46 @@ class BucketInventoryTest extends \PHPUnit\Framework\TestCase
         $request = new Models\PutBucketInventoryRequest('bucket-123', 'report1', inventoryConfiguration: new Models\InventoryConfiguration(
             isEnabled: true,
             destination: new Models\InventoryDestination(
-            ossBucketDestination: new Models\InventoryOSSBucketDestination(
-                bucket: 'acs:oss:::destination-bucket',
-                prefix: 'prefix1',
-                encryption: new Models\InventoryEncryption(
-                sseKms: new Models\SSEKMS('keyId')
+                ossBucketDestination: new Models\InventoryOSSBucketDestination(
+                    bucket: 'acs:oss:::destination-bucket',
+                    prefix: 'prefix1',
+                    encryption: new Models\InventoryEncryption(
+                        sseKms: new Models\SSEKMS('keyId')
+                    ),
+                    format: Models\InventoryFormatType::CSV,
+                    accountId: '1000000000000000', roleArn: 'acs:ram::1000000000000000:role/AliyunOSSRole'
+                )
             ),
-                format: Models\InventoryFormatType::CSV,
-                accountId: '1000000000000000', roleArn: 'acs:ram::1000000000000000:role/AliyunOSSRole'
-            )
-        ),
             filter: new Models\InventoryFilter(
-            prefix: 'filterPrefix',
-            lastModifyBeginTimeStamp: 1637883649,
-            lastModifyEndTimeStamp: 1638347592,
-            lowerSizeBound: 1024,
-            upperSizeBound: 1048576,
-            storageClass: 'Standard,IA'
-        ),
+                prefix: 'filterPrefix',
+                lastModifyBeginTimeStamp: 1637883649,
+                lastModifyEndTimeStamp: 1638347592,
+                lowerSizeBound: 1024,
+                upperSizeBound: 1048576,
+                storageClass: 'Standard,IA'
+            ),
             includedObjectVersions: 'All',
             optionalFields: new Models\OptionalFields(
-            [
-                Models\InventoryOptionalFieldType::SIZE,
-                Models\InventoryOptionalFieldType::LAST_MODIFIED_DATE,
-                Models\InventoryOptionalFieldType::ETAG,
-                Models\InventoryOptionalFieldType::STORAGE_CLASS,
-                Models\InventoryOptionalFieldType::IS_MULTIPART_UPLOADED,
-                Models\InventoryOptionalFieldType::ENCRYPTION_STATUS,
-                Models\InventoryOptionalFieldType::TRANSITION_TIME,
-            ]
-        ),
+                [
+                    Models\InventoryOptionalFieldType::SIZE,
+                    Models\InventoryOptionalFieldType::LAST_MODIFIED_DATE,
+                    Models\InventoryOptionalFieldType::ETAG,
+                    Models\InventoryOptionalFieldType::STORAGE_CLASS,
+                    Models\InventoryOptionalFieldType::IS_MULTIPART_UPLOADED,
+                    Models\InventoryOptionalFieldType::ENCRYPTION_STATUS,
+                    Models\InventoryOptionalFieldType::TRANSITION_TIME,
+                    Models\InventoryOptionalFieldType::OBJECT_ACL,
+                    Models\InventoryOptionalFieldType::OBJECT_TYPE,
+                    Models\InventoryOptionalFieldType::CRC64,
+                    Models\InventoryOptionalFieldType::TAGGING_COUNT,
+                ]
+            ),
             id: 'report1'
         ));
         $input = BucketInventory::fromPutBucketInventory($request);
         $this->assertEquals('bucket-123', $input->getBucket());
         $xml = <<<BBB
-<?xml version="1.0" encoding="UTF-8"?><InventoryConfiguration><IsEnabled>true</IsEnabled><Destination><OSSBucketDestination><Bucket>acs:oss:::destination-bucket</Bucket><Prefix>prefix1</Prefix><Encryption><SSE-KMS><KeyId>keyId</KeyId></SSE-KMS></Encryption><Format>CSV</Format><AccountId>1000000000000000</AccountId><RoleArn>acs:ram::1000000000000000:role/AliyunOSSRole</RoleArn></OSSBucketDestination></Destination><Filter><Prefix>filterPrefix</Prefix><LastModifyBeginTimeStamp>1637883649</LastModifyBeginTimeStamp><LastModifyEndTimeStamp>1638347592</LastModifyEndTimeStamp><LowerSizeBound>1024</LowerSizeBound><UpperSizeBound>1048576</UpperSizeBound><StorageClass>Standard,IA</StorageClass></Filter><IncludedObjectVersions>All</IncludedObjectVersions><OptionalFields><Field>Size</Field><Field>LastModifiedDate</Field><Field>ETag</Field><Field>StorageClass</Field><Field>IsMultipartUploaded</Field><Field>EncryptionStatus</Field><Field>TransitionTime</Field></OptionalFields><Id>report1</Id></InventoryConfiguration>
+<?xml version="1.0" encoding="UTF-8"?><InventoryConfiguration><IsEnabled>true</IsEnabled><Destination><OSSBucketDestination><Bucket>acs:oss:::destination-bucket</Bucket><Prefix>prefix1</Prefix><Encryption><SSE-KMS><KeyId>keyId</KeyId></SSE-KMS></Encryption><Format>CSV</Format><AccountId>1000000000000000</AccountId><RoleArn>acs:ram::1000000000000000:role/AliyunOSSRole</RoleArn></OSSBucketDestination></Destination><Filter><Prefix>filterPrefix</Prefix><LastModifyBeginTimeStamp>1637883649</LastModifyBeginTimeStamp><LastModifyEndTimeStamp>1638347592</LastModifyEndTimeStamp><LowerSizeBound>1024</LowerSizeBound><UpperSizeBound>1048576</UpperSizeBound><StorageClass>Standard,IA</StorageClass></Filter><IncludedObjectVersions>All</IncludedObjectVersions><OptionalFields><Field>Size</Field><Field>LastModifiedDate</Field><Field>ETag</Field><Field>StorageClass</Field><Field>IsMultipartUploaded</Field><Field>EncryptionStatus</Field><Field>TransitionTime</Field><Field>ObjectAcl</Field><Field>ObjectType</Field><Field>Crc64</Field><Field>TaggingCount</Field></OptionalFields><Id>report1</Id></InventoryConfiguration>
 BBB;
         $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
 
@@ -83,24 +87,24 @@ BBB;
         $request = new Models\PutBucketInventoryRequest('bucket-123', 'report1', inventoryConfiguration: new Models\InventoryConfiguration(
             isEnabled: true,
             destination: new Models\InventoryDestination(
-            ossBucketDestination: new Models\InventoryOSSBucketDestination(
-                bucket: 'acs:oss:::destination-bucket',
-                format: Models\InventoryFormatType::CSV,
-                accountId: '1000000000000000',
-                roleArn: 'acs:ram::1000000000000000:role/AliyunOSSRole'
-            )
-        ),
+                ossBucketDestination: new Models\InventoryOSSBucketDestination(
+                    bucket: 'acs:oss:::destination-bucket',
+                    format: Models\InventoryFormatType::CSV,
+                    accountId: '1000000000000000',
+                    roleArn: 'acs:ram::1000000000000000:role/AliyunOSSRole'
+                )
+            ),
             schedule: new Models\InventorySchedule(
-            frequency: Models\InventoryFrequencyType::DAILY
-        ),
+                frequency: Models\InventoryFrequencyType::DAILY
+            ),
             filter: new Models\InventoryFilter(
-            prefix: 'filterPrefix',
-            lastModifyBeginTimeStamp: 1637883649,
-            lastModifyEndTimeStamp: 1638347592,
-            lowerSizeBound: 1024,
-            upperSizeBound: 1048576,
-            storageClass: 'Standard,IA'
-        ),
+                prefix: 'filterPrefix',
+                lastModifyBeginTimeStamp: 1637883649,
+                lastModifyEndTimeStamp: 1638347592,
+                lowerSizeBound: 1024,
+                upperSizeBound: 1048576,
+                storageClass: 'Standard,IA'
+            ),
             includedObjectVersions: 'All',
             id: 'report1'
         ));
@@ -108,6 +112,63 @@ BBB;
         $this->assertEquals('bucket-123', $input->getBucket());
         $xml = <<<BBB
 <?xml version="1.0" encoding="UTF-8"?><InventoryConfiguration><IsEnabled>true</IsEnabled><Destination><OSSBucketDestination><Bucket>acs:oss:::destination-bucket</Bucket><Format>CSV</Format><AccountId>1000000000000000</AccountId><RoleArn>acs:ram::1000000000000000:role/AliyunOSSRole</RoleArn></OSSBucketDestination></Destination><Schedule><Frequency>Daily</Frequency></Schedule><Filter><Prefix>filterPrefix</Prefix><LastModifyBeginTimeStamp>1637883649</LastModifyBeginTimeStamp><LastModifyEndTimeStamp>1638347592</LastModifyEndTimeStamp><LowerSizeBound>1024</LowerSizeBound><UpperSizeBound>1048576</UpperSizeBound><StorageClass>Standard,IA</StorageClass></Filter><IncludedObjectVersions>All</IncludedObjectVersions><Id>report1</Id></InventoryConfiguration>
+BBB;
+        $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
+
+        $request = new Models\PutBucketInventoryRequest('bucket-123', 'report1', inventoryConfiguration: new Models\InventoryConfiguration(
+            isEnabled: true,
+            destination: new Models\InventoryDestination(
+                ossBucketDestination: new Models\InventoryOSSBucketDestination(
+                    bucket: 'acs:oss:::destination-bucket',
+                    format: Models\InventoryFormatType::CSV,
+                    accountId: '1000000000000000',
+                    roleArn: 'acs:ram::1000000000000000:role/AliyunOSSRole'
+                )
+            ),
+            schedule: new Models\InventorySchedule(
+                frequency: Models\InventoryFrequencyType::DAILY
+            ),
+            filter: new Models\InventoryFilter(
+                prefix: 'filterPrefix',
+                lastModifyBeginTimeStamp: 1637883649,
+                lastModifyEndTimeStamp: 1638347592,
+                lowerSizeBound: 1024,
+                upperSizeBound: 1048576,
+                storageClass: 'Standard,IA'
+            ),
+            includedObjectVersions: 'All',
+            id: 'report1',
+            incrementalInventory: new Models\IncrementalInventory(
+                isEnabled: true,
+                schedule: new Models\IncrementInventorySchedule(
+                    frequency: 600,
+                ),
+                optionalFields: new Models\IncrementalInventoryOptionalFields(
+                    [
+                        Models\IncrementalInventoryOptionalFieldType::SEQUENCE_NUMBER,
+                        Models\IncrementalInventoryOptionalFieldType::RECORD_TYPE,
+                        Models\IncrementalInventoryOptionalFieldType::RECORD_TIMESTAMP,
+                        Models\IncrementalInventoryOptionalFieldType::REQUESTER,
+                        Models\IncrementalInventoryOptionalFieldType::SOURCE_IP,
+                        Models\IncrementalInventoryOptionalFieldType::REQUEST_ID,
+                        Models\IncrementalInventoryOptionalFieldType::SIZE,
+                        Models\IncrementalInventoryOptionalFieldType::STORAGE_CLASS,
+                        Models\IncrementalInventoryOptionalFieldType::LAST_MODIFIED_DATE,
+                        Models\IncrementalInventoryOptionalFieldType::ETAG,
+                        Models\IncrementalInventoryOptionalFieldType::IS_MULTIPART_UPLOADED,
+                        Models\IncrementalInventoryOptionalFieldType::OBJECT_TYPE,
+                        Models\IncrementalInventoryOptionalFieldType::OBJECT_ACL,
+                        Models\IncrementalInventoryOptionalFieldType::CRC64,
+                        Models\IncrementalInventoryOptionalFieldType::ENCRYPTION_STATUS
+                    ]
+                )
+            ),
+
+        ));
+        $input = BucketInventory::fromPutBucketInventory($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $xml = <<<BBB
+<?xml version="1.0" encoding="UTF-8"?><InventoryConfiguration><IsEnabled>true</IsEnabled><Destination><OSSBucketDestination><Bucket>acs:oss:::destination-bucket</Bucket><Format>CSV</Format><AccountId>1000000000000000</AccountId><RoleArn>acs:ram::1000000000000000:role/AliyunOSSRole</RoleArn></OSSBucketDestination></Destination><Schedule><Frequency>Daily</Frequency></Schedule><Filter><Prefix>filterPrefix</Prefix><LastModifyBeginTimeStamp>1637883649</LastModifyBeginTimeStamp><LastModifyEndTimeStamp>1638347592</LastModifyEndTimeStamp><LowerSizeBound>1024</LowerSizeBound><UpperSizeBound>1048576</UpperSizeBound><StorageClass>Standard,IA</StorageClass></Filter><IncludedObjectVersions>All</IncludedObjectVersions><Id>report1</Id><IncrementalInventory><IsEnabled>true</IsEnabled><Schedule><Frequency>600</Frequency></Schedule><OptionalFields><Field>SequenceNumber</Field><Field>RecordType</Field><Field>RecordTimestamp</Field><Field>Requester</Field><Field>SourceIp</Field><Field>RequestId</Field><Field>Size</Field><Field>StorageClass</Field><Field>LastModifiedDate</Field><Field>ETag</Field><Field>IsMultipartUploaded</Field><Field>ObjectType</Field><Field>ObjectAcl</Field><Field>Crc64</Field><Field>EncryptionStatus</Field></OptionalFields></IncrementalInventory></InventoryConfiguration>
 BBB;
         $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
     }
@@ -278,6 +339,111 @@ BBB;
         $this->assertEquals('acs:oss:::destination-bucket', $result->inventoryConfiguration->destination->ossBucketDestination->bucket);
         $this->assertEquals(Models\InventoryFrequencyType::WEEKLY, $result->inventoryConfiguration->schedule->frequency);
         $this->assertEquals('Current', $result->inventoryConfiguration->includedObjectVersions);
+
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+			<InventoryConfiguration>
+     <Id>report1</Id>
+     <IsEnabled>true</IsEnabled>
+     <Destination>
+        <OSSBucketDestination>
+           <Format>CSV</Format>
+           <AccountId>1000000000000000</AccountId>
+           <RoleArn>acs:ram::1000000000000000:role/AliyunOSSRole</RoleArn>
+           <Bucket>acs:oss:::bucket_0001</Bucket>
+           <Prefix>prefix1</Prefix>
+           <Encryption>
+              <SSE-KMS>
+                 <KeyId>keyId</KeyId>
+              </SSE-KMS>
+           </Encryption>
+        </OSSBucketDestination>
+     </Destination>
+     <Schedule>
+        <Frequency>Daily</Frequency>
+     </Schedule>
+     <Filter>
+        <LastModifyBeginTimeStamp>1637883649</LastModifyBeginTimeStamp>
+        <LastModifyEndTimeStamp>1638347592</LastModifyEndTimeStamp>
+        <LowerSizeBound>1024</LowerSizeBound>
+        <UpperSizeBound>1048576</UpperSizeBound>
+        <StorageClass>Standard,IA</StorageClass>
+       	<Prefix>myprefix/</Prefix>
+     </Filter>
+     <IncludedObjectVersions>All</IncludedObjectVersions>
+     <OptionalFields>
+        <Field>Size</Field>
+        <Field>LastModifiedDate</Field>
+        <Field>ETag</Field>
+        <Field>StorageClass</Field>
+        <Field>IsMultipartUploaded</Field>
+        <Field>EncryptionStatus</Field>
+		<Field>TransitionTime</Field>
+		<Field>ObjectAcl</Field>
+		<Field>TaggingCount</Field>
+		<Field>ObjectType</Field>
+		<Field>Crc64</Field>
+     </OptionalFields>
+     <IncrementalInventory>
+        <IsEnabled>true</IsEnabled>
+		<Schedule>
+        	<Frequency>600</Frequency>
+		</Schedule>
+		<OptionalFields>
+         <Field>SequenceNumber</Field>
+         <Field>RecordType</Field>
+         <Field>RecordTimestamp</Field>
+         <Field>Requester</Field>
+         <Field>SourceIp</Field>
+         <Field>RequestId</Field>
+         <Field>Size</Field>
+         <Field>StorageClass</Field>
+         <Field>LastModifiedDate</Field>
+         <Field>ETag</Field>
+         <Field>IsMultipartUploaded</Field>
+         <Field>ObjectType</Field>
+         <Field>ObjectAcl</Field>
+         <Field>Crc64</Field>
+         <Field>EncryptionStatus</Field>
+      </OptionalFields>
+     </IncrementalInventory>
+  </InventoryConfiguration>';
+        $output = new OperationOutput(
+            'OK',
+            200,
+            ['x-oss-request-id' => '123'],
+            Utils::streamFor($body)
+        );
+        $result = BucketInventory::toGetBucketInventory($output);
+        $this->assertEquals('OK', $result->status);
+        $this->assertEquals(200, $result->statusCode);
+        $this->assertEquals('123', $result->requestId);
+        $this->assertEquals(1, count($result->headers));
+        $this->assertEquals('123', $result->headers['x-oss-request-id']);
+        $this->assertEquals('report1', $result->inventoryConfiguration->id);
+        $this->assertTrue($result->inventoryConfiguration->isEnabled);
+        $this->assertEquals(Models\InventoryFormatType::CSV, $result->inventoryConfiguration->destination->ossBucketDestination->format);
+        $this->assertEquals('1000000000000000', $result->inventoryConfiguration->destination->ossBucketDestination->accountId);
+        $this->assertEquals('acs:ram::1000000000000000:role/AliyunOSSRole', $result->inventoryConfiguration->destination->ossBucketDestination->roleArn);
+        $this->assertEquals('acs:oss:::bucket_0001', $result->inventoryConfiguration->destination->ossBucketDestination->bucket);
+        $this->assertEquals('prefix1', $result->inventoryConfiguration->destination->ossBucketDestination->prefix);
+        $this->assertEquals('keyId', $result->inventoryConfiguration->destination->ossBucketDestination->encryption->sseKms->keyId);
+        $this->assertEquals(Models\InventoryFrequencyType::DAILY, $result->inventoryConfiguration->schedule->frequency);
+        $this->assertEquals('All', $result->inventoryConfiguration->includedObjectVersions);
+        $this->assertEquals(11, count($result->inventoryConfiguration->optionalFields->fields));
+        $this->assertEquals(Models\InventoryOptionalFieldType::STORAGE_CLASS, $result->inventoryConfiguration->optionalFields->fields[3]);
+        $this->assertEquals(Models\InventoryOptionalFieldType::TRANSITION_TIME, $result->inventoryConfiguration->optionalFields->fields[6]);
+        $this->assertEquals('myprefix/', $result->inventoryConfiguration->filter->prefix);
+        $this->assertEquals(1637883649, $result->inventoryConfiguration->filter->lastModifyBeginTimeStamp);
+        $this->assertEquals(1638347592, $result->inventoryConfiguration->filter->lastModifyEndTimeStamp);
+        $this->assertEquals(1024, $result->inventoryConfiguration->filter->lowerSizeBound);
+        $this->assertEquals(1048576, $result->inventoryConfiguration->filter->upperSizeBound);
+        $this->assertEquals('Standard,IA', $result->inventoryConfiguration->filter->storageClass);
+
+        $this->assertEquals(true, $result->inventoryConfiguration->incrementalInventory->isEnabled);
+        $this->assertEquals(600, $result->inventoryConfiguration->incrementalInventory->schedule->frequency);
+        $this->assertEquals(15, count($result->inventoryConfiguration->incrementalInventory->optionalFields->fields));
+        $this->assertEquals(Models\IncrementalInventoryOptionalFieldType::SEQUENCE_NUMBER, $result->inventoryConfiguration->incrementalInventory->optionalFields->fields[0]);
+        $this->assertEquals(Models\IncrementalInventoryOptionalFieldType::ENCRYPTION_STATUS, $result->inventoryConfiguration->incrementalInventory->optionalFields->fields[14]);
     }
 
     public function testFromListBucketInventory()

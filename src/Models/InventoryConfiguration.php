@@ -65,6 +65,13 @@ final class InventoryConfiguration extends Model
     public ?string $id;
 
     /**
+     * Configuration container for incremental inventory.
+     * @var IncrementalInventory|null
+     */
+    #[XmlElement(rename: 'IncrementalInventory', type: IncrementalInventory::class)]
+    public ?IncrementalInventory $incrementalInventory;
+
+    /**
      * InventoryConfiguration constructor.
      * @param bool|null $isEnabled Specifies whether to enable the bucket inventory feature.
      * @param InventoryDestination|null $destination The container that stores the exported inventory lists.
@@ -72,16 +79,18 @@ final class InventoryConfiguration extends Model
      * @param InventoryFilter|null $filter The container that stores the prefix used to filter objects.
      * @param string|null $includedObjectVersions Specifies whether to include the version information about the objects in inventory lists.
      * @param OptionalFields|null $optionalFields The container that stores the configuration fields in inventory lists.
-     * @param string|null $id The name of the inventory.
+     * @param string|null $id Configuration container for incremental inventory.
+     * @param IncrementalInventory|null $incrementalInventory
      */
     public function __construct(
-        ?bool $isEnabled = null,
+        ?bool                 $isEnabled = null,
         ?InventoryDestination $destination = null,
-        ?InventorySchedule $schedule = null,
-        ?InventoryFilter $filter = null,
-        ?string $includedObjectVersions = null,
-        ?OptionalFields $optionalFields = null,
-        ?string $id = null
+        ?InventorySchedule    $schedule = null,
+        ?InventoryFilter      $filter = null,
+        ?string               $includedObjectVersions = null,
+        ?OptionalFields       $optionalFields = null,
+        ?string               $id = null,
+        ?IncrementalInventory $incrementalInventory = null
     )
     {
         $this->isEnabled = $isEnabled;
@@ -91,5 +100,6 @@ final class InventoryConfiguration extends Model
         $this->includedObjectVersions = $includedObjectVersions;
         $this->optionalFields = $optionalFields;
         $this->id = $id;
+        $this->incrementalInventory = $incrementalInventory;
     }
 }
