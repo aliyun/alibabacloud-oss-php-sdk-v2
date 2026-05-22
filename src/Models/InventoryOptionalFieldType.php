@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace AlibabaCloud\Oss\V2\Models;
 
 /**
- *
  * Class InventoryOptionalFieldType
  * @package AlibabaCloud\Oss\V2\Models
  */
@@ -17,4 +16,8 @@ class InventoryOptionalFieldType
     const IS_MULTIPART_UPLOADED = 'IsMultipartUploaded';
     const ENCRYPTION_STATUS = 'EncryptionStatus';
     const TRANSITION_TIME = 'TransitionTime';
+    const OBJECT_ACL = 'ObjectAcl';
+    const CRC64 = 'Crc64';
+    const OBJECT_TYPE = 'ObjectType';
+    const TAGGING_COUNT = 'TaggingCount';
 }
