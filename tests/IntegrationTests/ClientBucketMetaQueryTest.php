@@ -34,21 +34,21 @@ class ClientBucketMetaQueryTest extends TestIntegration
         // DoMetaQuery
         $request = new Oss\Models\DoMetaQueryRequest($bucketName, new Oss\Models\MetaQuery(
             maxResults: 5,
-            query: "{'Field': 'Size','Value': '1048576','Operation': 'gt'}",
+            query: '{"Field": "Size", "Value": "1048576", "Operation": "gt"}',
             sort: 'Size',
             order: Oss\Models\MetaQueryOrderType::ASC,
             aggregations: new Oss\Models\MetaQueryAggregations(
-            [
-                new Oss\Models\MetaQueryAggregation(
-                    field: 'Size',
-                    operation: 'sum'
-                ),
-                new Oss\Models\MetaQueryAggregation(
-                    field: 'Size',
-                    operation: 'max'
-                ),
-            ]
-        ),
+                [
+                    new Oss\Models\MetaQueryAggregation(
+                        field: 'Size',
+                        operation: 'sum'
+                    ),
+                    new Oss\Models\MetaQueryAggregation(
+                        field: 'Size',
+                        operation: 'max'
+                    ),
+                ]
+            ),
         ));
         $doResult = $client->doMetaQuery($request);
         $this->assertEquals(200, $doResult->statusCode);
@@ -137,21 +137,21 @@ class ClientBucketMetaQueryTest extends TestIntegration
         try {
             $request = new Oss\Models\DoMetaQueryRequest($bucketName, new Oss\Models\MetaQuery(
                 maxResults: 5,
-                query: "{'Field': 'Size','Value': '1048576','Operation': 'gt'}",
+                query: '{"Field": "Size", "Value": "1048576", "Operation": "gt"}',
                 sort: 'Size',
                 order: Oss\Models\MetaQueryOrderType::ASC,
                 aggregations: new Oss\Models\MetaQueryAggregations(
-                [
-                    new Oss\Models\MetaQueryAggregation(
-                        field: 'Size',
-                        operation: 'sum'
-                    ),
-                    new Oss\Models\MetaQueryAggregation(
-                        field: 'Size',
-                        operation: 'max'
-                    ),
-                ]
-            ),
+                    [
+                        new Oss\Models\MetaQueryAggregation(
+                            field: 'Size',
+                            operation: 'sum'
+                        ),
+                        new Oss\Models\MetaQueryAggregation(
+                            field: 'Size',
+                            operation: 'max'
+                        ),
+                    ]
+                ),
             ));
             $doResult = $client->doMetaQuery($request);
             $this->assertTrue(false, "should not here");
