@@ -17,7 +17,7 @@ class TestIntegration extends \PHPUnit\Framework\TestCase
     static $PAYER_ACCESS_KEY;
     static $PAYER_UID;
 
-    public static $BUCKETNAME_PREFIX = "php-sdk-test-bucket-";
+    static $BUCKETNAME_PREFIX;
     public static $OBJECTNAME_PREFIX = "php-sdk-test-object-";
 
     static ?Oss\Client $defaultClient = null;
@@ -40,6 +40,7 @@ class TestIntegration extends \PHPUnit\Framework\TestCase
         self::$PAYER_ACCESS_ID = getenv("OSS_TEST_PAYER_ACCESS_KEY_ID");
         self::$PAYER_ACCESS_KEY = getenv("OSS_TEST_PAYER_ACCESS_KEY_SECRET");
         self::$PAYER_UID = getenv("OSS_TEST_PAYER_UID");
+        self::$BUCKETNAME_PREFIX = self::getBucketNamePrefix();
 
         $client = self::getDefaultClient();
         $bucketName = self::randomBucketName();
@@ -54,7 +55,7 @@ class TestIntegration extends \PHPUnit\Framework\TestCase
     public static function tearDownAfterClass(): void
     {
         //clean access points
-        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {        
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
             self::deleteAccessPoint(self::getDefaultClient(), self::$bucketName);
         }
 
@@ -398,5 +399,14 @@ class TestIntegration extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $result->statusCode);
         $this->assertEquals('OK', $result->status);
         return $result->contentType;
+    }
+
+    static function getBucketNamePrefix()
+    {
+        $val = getenv('OSS_TEST_BUCKET_PREFIX');
+        if ($val != '') {
+            return $val . 'go-bucket-';
+        }
+        return 'sdk-oss-test-php-bucket-';
     }
 }

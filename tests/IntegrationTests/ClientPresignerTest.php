@@ -6,6 +6,8 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestIntegration.php';
 
 use AlibabaCloud\Oss\V2\Client;
 use AlibabaCloud\Oss\V2\Models\CompleteMultipartUpload;
+use AlibabaCloud\Oss\V2\OperationInput;
+use AlibabaCloud\Oss\V2\Serializer;
 use AlibabaCloud\Oss\V2\Transform\Functions;
 use AlibabaCloud\Oss\V2\Utils;
 use DateInterval;
@@ -474,16 +476,26 @@ class ClientPresignerTest extends TestIntegration
     public function testPresignWithAnonymous()
     {
         $client = $this->getDefaultClient();
-        $bucketName = self::$bucketName.'-pub';
+        $bucketName = self::$bucketName . '-pub';
         $objectName = self::$OBJECTNAME_PREFIX . self::randomLowStr() . '-put-object';
 
         $client->putBucket(new Oss\Models\PutBucketRequest($bucketName));
-        $client->putBucketPublicAccessBlock(new Oss\Models\PutBucketPublicAccessBlockRequest(
-            $bucketName,
-            new Oss\Models\PublicAccessBlockConfiguration(
-                false
-            )
-        ));
+
+        $input = new OperationInput(
+            'PutBucketPublicAccessBlock',
+            'PUT',
+            ['Content-Type' => 'application/xml']
+        );
+        $input->setParameter('publicAccessBlock', '');
+        $input->setBucket($bucketName);
+        $input->setOpMetadata('sub-resource', ['publicAccessBlock',]);
+        $stream = Utils::streamFor('<?xml version="1.0" encoding="UTF-8"?>
+<PublicAccessBlockConfiguration>
+  <BlockPublicAccess>false</BlockPublicAccess>
+</PublicAccessBlockConfiguration>');
+        $input->setBody($stream);
+        $input->setHeader("Content-MD5", Utils::calcContentMd5($input->getBody()));
+        $client->invokeOperation($input);
 
         $content = 'hi oss';
         $putObjectRequest = new Oss\Models\PutObjectRequest(
