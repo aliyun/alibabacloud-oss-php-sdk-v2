@@ -10,16 +10,19 @@ namespace AlibabaCloud\Oss\V2\Models;
 class EncryptionMultipartContext
 {
     /**
+     * The content cipher used to encrypt each part in the multipart upload.
      * @var \AlibabaCloud\Oss\V2\Crypto\ContentCipherInterface;
      */
     public $contentCipher;
 
     /**
+     * The total size of the multipart upload data.
      * @var int|null
      */
     public ?int $dataSize;
 
     /**
+     * The size of each part in the multipart upload.
      * @var int|null
      */
     public ?int $partSize;

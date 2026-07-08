@@ -13,6 +13,7 @@ use AlibabaCloud\Oss\V2\Types\ResultModel;
 final class GetAccessPointPolicyResult extends ResultModel
 {
     /**
+     * The configurations of the access point policy.
      * @var string|null
      */
     public ?string $body;

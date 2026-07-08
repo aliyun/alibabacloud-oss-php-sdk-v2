@@ -15,6 +15,7 @@ use AlibabaCloud\Oss\V2\Annotation\RequiredProperty;
 final class DeleteUserDefinedLogFieldsConfigRequest extends RequestModel
 {
     /**
+     * The name of the bucket.
      * @var string|null
      */
     #[RequiredProperty()]

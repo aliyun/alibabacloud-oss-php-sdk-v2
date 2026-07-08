@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class MetaQueryAddresses extends Model
 {
     /**
+     * The list of addresses.
      * @var array<MetaQueryAddress>|null
      */
     #[XmlElement(rename: 'Address', type: MetaQueryAddress::class)]

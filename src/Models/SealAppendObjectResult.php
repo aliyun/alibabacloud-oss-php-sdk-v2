@@ -13,6 +13,7 @@ use AlibabaCloud\Oss\V2\Types\ResultModel;
 final class SealAppendObjectResult extends ResultModel
 {
     /**
+     * The GMT time when the SealAppendObject operation was first performed on the object.
      * @var string|null
      */
     public ?string $sealedTime;

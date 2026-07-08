@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class MetaQueryAudioStreams extends Model
 {
     /**
+     * The list of audio streams.
      * @var array<MetaQueryAudioStream>|null
      */
     #[XmlElement(rename: 'AudioStream', type: MetaQueryAudioStream::class)]

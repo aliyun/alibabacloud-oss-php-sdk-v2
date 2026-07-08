@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class MetaQueryOssTagging extends Model
 {
     /**
+     * The list of object tags.
      * @var array<MetaQueryTagging>|null
      */
     #[XmlElement(rename: 'Tagging', type: MetaQueryTagging::class)]

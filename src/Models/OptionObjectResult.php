@@ -14,29 +14,34 @@ use AlibabaCloud\Oss\V2\Annotation\TagHeader;
 final class OptionObjectResult extends ResultModel
 {
     /**
+     * The origins allowed for cross-origin resource sharing (CORS).
      * @var string|null
      */
     #[TagHeader(rename: 'Access-Control-Allow-Origin', type: 'string')]
     public ?string $accessControlAllowOrigin;
 
     /**
+     * The methods allowed for CORS.
      * @var string|null
      */
     #[TagHeader(rename: 'Access-Control-Allow-Methods', type: 'string')]
     public ?string $accessControlAllowMethods;
 
     /**
+     * The headers allowed for CORS.
      * @var string|null
      */
     #[TagHeader(rename: 'Access-Control-Allow-Headers', type: 'string')]
     public ?string $accessControlAllowHeaders;
     /**
+     * The headers that can be accessed by JavaScript applications on the client.
      * @var string|null
      */
     #[TagHeader(rename: 'Access-Control-Expose-Headers', type: 'string')]
     public ?string $accessControlExposeHeaders;
 
     /**
+     * The maximum caching period for CORS.
      * @var int|null
      */
     #[TagHeader(rename: 'Access-Control-Max-Age', type: 'int')]

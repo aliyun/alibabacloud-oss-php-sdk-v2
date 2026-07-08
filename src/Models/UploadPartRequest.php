@@ -79,46 +79,55 @@ final class UploadPartRequest extends RequestModel
     public ?EncryptionMultipartContext $encryptionMultipartContext;
 
     /**
+     * The encrypted data encryption key used for client-side encryption, only valid in EncryptionClient.
      * @var string|null
      */
     public ?string $clientSideEncryptionKey;
 
     /**
+     * The encrypted initialization vector (IV) used for client-side encryption, only valid in EncryptionClient.
      * @var string|null
      */
     public ?string $clientSideEncryptionStart;
 
     /**
+     * The algorithm used to encrypt the object content in client-side encryption, only valid in EncryptionClient.
      * @var string|null
      */
     public ?string $clientSideEncryptionCekAlg;
 
     /**
+     * The algorithm used to encrypt the data encryption key in client-side encryption, only valid in EncryptionClient.
      * @var string|null
      */
     public ?string $clientSideEncryptionWrapAlg;
 
     /**
+     * The description of the master key used for client-side encryption, only valid in EncryptionClient.
      * @var string|null
      */
     public ?string $clientSideEncryptionMatdesc;
 
     /**
+     * The length of the object content before client-side encryption, only valid in EncryptionClient.
      * @var int|null
      */
     public ?int $clientSideEncryptionUnencryptedContentLength;
 
     /**
+     * The MD5 hash of the object content before client-side encryption, only valid in EncryptionClient.
      * @var string|null
      */
     public ?string $clientSideEncryptionUnencryptedContentMd5;
 
     /**
+     * The total size of the multipart upload data for client-side encryption, only valid in EncryptionClient.
      * @var int|null
      */
     public ?int $clientSideEncryptionDataSize;
 
     /**
+     * The size of each part in the multipart upload for client-side encryption, only valid in EncryptionClient.
      * @var int|null
      */
     public ?int $clientSideEncryptionPartSize;

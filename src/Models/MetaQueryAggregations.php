@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class MetaQueryAggregations extends Model
 {
     /**
+     * The list of aggregation results.
      * @var array<MetaQueryAggregation>|null
      */
     #[XmlElement(rename: 'Aggregation', type: MetaQueryAggregation::class)]

@@ -23,6 +23,7 @@ final class DeleteBucketTagsRequest extends RequestModel
     public ?string $bucket;
 
     /**
+     * The tagging subresource that identifies the tags to delete. Specify the tag keys to delete only specific tags.
      * @var string|null
      */
     #[TagProperty(tag: '', position: 'query', rename: 'tagging', type: 'string')]

@@ -13,6 +13,7 @@ use AlibabaCloud\Oss\V2\Types\ResultModel;
 final class GetBucketPolicyResult extends ResultModel
 {
     /**
+     * The configurations of the bucket policy.
      * @var string|null
      */
     public ?string $body;
