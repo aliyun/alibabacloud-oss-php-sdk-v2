@@ -14,12 +14,14 @@ use AlibabaCloud\Oss\V2\Annotation\TagProperty;
 final class ListUserDataRedundancyTransitionRequest extends RequestModel
 {   
     /**
+     * The token from which the list operation starts. You can obtain the token from NextContinuationToken in the response of the previous request.
      * @var string|null
      */
     #[TagProperty(tag: '', position: 'query', rename: 'continuation-token', type: 'string')]
     public ?string $continuationToken;
 
-    /** 
+    /**
+     * The maximum number of results to return. Valid values: 1 to 1000.
      * @var int|null
      */
     #[TagProperty(tag: '', position: 'query', rename: 'max-keys', type: 'int')]

@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class MetaQueryVideoStreams extends Model
 {
     /**
+     * The list of video streams.
      * @var array<MetaQueryVideoStream>|null
      */
     #[XmlElement(rename: 'VideoStream', type: MetaQueryVideoStream::class)]

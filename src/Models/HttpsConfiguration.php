@@ -23,6 +23,7 @@ final class HttpsConfiguration extends Model
     public ?TLS $tls;
 
     /**
+     * The container that stores the cipher suite configurations.
      * @var CipherSuite|null
      */
     #[XmlElement(rename: 'CipherSuite', type: CipherSuite::class)]

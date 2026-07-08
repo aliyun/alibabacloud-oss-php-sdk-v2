@@ -14,6 +14,7 @@ use AlibabaCloud\Oss\V2\Annotation\TagBody;
 final class ListUserDataRedundancyTransitionResult extends ResultModel
 {
     /**
+     * The container that stores the list of data redundancy transition tasks.
      * @var ListBucketDataRedundancyTransition|null
      */
     #[TagBody(rename: 'ListBucketDataRedundancyTransition', type: ListBucketDataRedundancyTransition::class, format: 'xml')]

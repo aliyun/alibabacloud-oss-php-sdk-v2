@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class ListBucketDataRedundancyTransition extends Model
 {
     /**
+     * The list of data redundancy transition tasks of the bucket.
      * @var array<BucketDataRedundancyTransition>|null
      */
     #[XmlElement(rename: 'BucketDataRedundancyTransition', type: BucketDataRedundancyTransition::class)]

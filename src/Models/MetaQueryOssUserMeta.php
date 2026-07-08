@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class MetaQueryOssUserMeta extends Model
 {
     /**
+     * The list of object user metadata.
      * @var array<MetaQueryUserMeta>|null
      */
     #[XmlElement(rename: 'UserMeta', type: MetaQueryUserMeta::class)]

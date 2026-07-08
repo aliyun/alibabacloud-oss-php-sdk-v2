@@ -14,6 +14,7 @@ use AlibabaCloud\Oss\V2\Annotation\TagHeader;
 final class PutBucketReplicationResult extends ResultModel
 {
     /**
+     * The ID of the data replication rule.
      * @var string|null
      */
     #[TagHeader(rename: 'x-oss-replication-rule-id', type: 'string')]

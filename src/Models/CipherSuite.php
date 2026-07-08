@@ -16,24 +16,28 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class CipherSuite extends Model
 {
     /**
+     * Specifies whether to enable the cipher suite configuration.
      * @var bool|null
      */
     #[XmlElement(rename: 'Enable', type: 'bool')]
     public ?bool $enable;
 
     /**
+     * Specifies whether to use the strong cipher suite.
      * @var bool|null
      */
     #[XmlElement(rename: 'StrongCipherSuite', type: 'bool')]
     public ?bool $strongCipherSuite;
 
     /**
+     * The custom cipher suites.
      * @var array<string>|null
      */
     #[XmlElement(rename: 'CustomCipherSuite', type: 'string')]
     public ?array $customCipherSuites;
 
     /**
+     * The custom cipher suites for TLS 1.3.
      * @var array<string>|null
      */
     #[XmlElement(rename: 'TLS13CustomCipherSuite', type: 'string')]

@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class MetaQuerySubtitles extends Model
 {
     /**
+     * The list of subtitle streams.
      * @var array<MetaQuerySubtitle>|null
      */
     #[XmlElement(rename: 'Subtitle', type: MetaQuerySubtitle::class)]

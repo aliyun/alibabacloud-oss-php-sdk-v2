@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class ReplicationEncryptionConfiguration extends Model
 {
     /**
+     * The ID of the customer master key (CMK) that is managed by Key Management Service (KMS).
      * @var string|null
      */
     #[XmlElement(rename: 'ReplicaKmsKeyID', type: 'string')]

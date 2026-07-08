@@ -16,6 +16,7 @@ use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
 final class MetaQueryFiles extends Model
 {
     /**
+     * The list of files that meet the query conditions.
      * @var array<MetaQueryFile>|null
      */
     #[XmlElement(rename: 'File', type: MetaQueryFile::class)]

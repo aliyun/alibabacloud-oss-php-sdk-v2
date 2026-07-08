@@ -32,12 +32,14 @@ final class RoutingRuleIncludeHeader extends Model
     public ?string $equals;
 
     /**
+     * The rule is matched only when the value of the header specified by Key starts with the specified value.
      * @var string|null
      */
     #[XmlElement(rename: 'StartsWith', type: 'string')]
     public ?string $startsWith;
 
     /**
+     * The rule is matched only when the value of the header specified by Key ends with the specified value.
      * @var string|null
      */
     #[XmlElement(rename: 'EndsWith', type: 'string')]
