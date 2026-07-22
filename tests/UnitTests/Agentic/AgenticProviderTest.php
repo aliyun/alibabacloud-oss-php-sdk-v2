@@ -60,6 +60,50 @@ class AgenticProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testBuildUrlPathStyle()
+    {
+        $provider = new AgenticProvider($this->newEndpoint(), '1234567890', 'cn-hangzhou', 'ab-apsr', 'path');
+
+        // with bucket -> physical bucket name in the path
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, 'my-bucket');
+        $this->assertEquals(
+            'https://oss-cn-hangzhou.aliyuncs.com/my-bucket-1234567890-cn-hangzhou-ab-apsr/',
+            $provider->buildUrl($input)
+        );
+
+        // with bucket and key
+        $input = new OperationInput('GetObject', 'GET', null, null, null, 'my-bucket', 'my-key');
+        $this->assertEquals(
+            'https://oss-cn-hangzhou.aliyuncs.com/my-bucket-1234567890-cn-hangzhou-ab-apsr/my-key',
+            $provider->buildUrl($input)
+        );
+
+        // without bucket -> bare endpoint authority
+        $input = new OperationInput('ListAgenticBuckets', 'GET');
+        $this->assertEquals(
+            'https://oss-cn-hangzhou.aliyuncs.com/',
+            $provider->buildUrl($input)
+        );
+    }
+
+    public function testClientConstructionWiringPathStyle()
+    {
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('cn-hangzhou');
+        $cfg->setAccountId('1234567890');
+        $cfg->setUsePathStyle(true);
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+
+        $client = new AgenticBucketClient($cfg);
+        $sdkOptions = $this->reflectOptions($client, 'sdkOptions');
+
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, 'my-bucket');
+        $this->assertEquals(
+            'https://oss-cn-hangzhou.aliyuncs.com/my-bucket-1234567890-cn-hangzhou-ab-apsr/',
+            $sdkOptions['endpoint_provider']->buildUrl($input)
+        );
+    }
+
     public function testBucketSpaceProvider()
     {
         $provider = new AgenticProvider($this->newEndpoint(), '1234567890', 'cn-hangzhou', 'bs-apsr');

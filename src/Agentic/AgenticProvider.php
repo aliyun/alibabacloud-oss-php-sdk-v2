@@ -44,18 +44,27 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
     private string $suffix;
 
     /**
+     * The address style ('virtual' or 'path') that decides where the physical
+     * bucket name is placed: as a host label (virtual-hosted) or in the path (path-style).
+     * @var string
+     */
+    private string $addressStyle;
+
+    /**
      * AgenticProvider constructor.
      * @param UriInterface $endpoint The base endpoint whose scheme and authority the request URL is built from.
      * @param string $accountId The account id used to derive the physical bucket name.
      * @param string $region The region used to derive the physical bucket name.
      * @param string $suffix The physical bucket name suffix (e.g. `ab-apsr` or `bs-apsr`).
+     * @param string $addressStyle The address style ('virtual' or 'path').
      */
-    public function __construct(UriInterface $endpoint, string $accountId, string $region, string $suffix)
+    public function __construct(UriInterface $endpoint, string $accountId, string $region, string $suffix, string $addressStyle = 'virtual')
     {
         $this->endpoint = $endpoint;
         $this->accountId = $accountId;
         $this->region = $region;
         $this->suffix = $suffix;
+        $this->addressStyle = $addressStyle;
     }
 
     /**
@@ -83,7 +92,8 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
             if (!isset($opts['endpoint'])) {
                 return;
             }
-            $provider = new AgenticProvider($opts['endpoint'], $accountId, $region, $suffix);
+            $addressStyle = $opts['address_style'] ?? 'virtual';
+            $provider = new AgenticProvider($opts['endpoint'], $accountId, $region, $suffix, $addressStyle);
             $opts['endpoint_provider'] = $provider;
             $opts['bucket_name_resolver'] = $provider;
         };
@@ -107,9 +117,10 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
     }
 
     /**
-     * Builds the virtual-hosted request URL. Bucket-scoped inputs route to the derived
-     * bucket host `{physicalBucket}.{authority}`; inputs without a bucket route to the
-     * bare endpoint authority.
+     * Builds the request URL. In virtual-hosted mode bucket-scoped inputs route to the
+     * derived bucket host `{physicalBucket}.{authority}`; in path-style mode they route to
+     * `{authority}/{physicalBucket}/`. Inputs without a bucket route to the bare endpoint
+     * authority in either mode.
      * @param OperationInput $input
      * @return string|null the request URL
      */
@@ -120,19 +131,28 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
             $authority .= ':' . $this->endpoint->getPort();
         }
 
+        $host = $authority;
+        $paths = [];
         $bucket = $input->getBucket();
-        if ($bucket === null || $bucket === '') {
-            $host = $authority;
-        } else {
-            $host = $this->buildBucketName($input) . '.' . $authority;
+        if ($bucket !== null && $bucket !== '') {
+            switch ($this->addressStyle) {
+                case 'path':
+                    array_push($paths, $this->buildBucketName($input));
+                    if ($input->getKey() === null || $input->getKey() === '') {
+                        array_push($paths, '');
+                    }
+                    break;
+                default:
+                    $host = $this->buildBucketName($input) . '.' . $authority;
+                    break;
+            }
         }
 
-        $path = '';
         $key = $input->getKey();
         if ($key !== null && $key !== '') {
-            $path = Utils::urlEncode($key, true);
+            array_push($paths, Utils::urlEncode($key, true));
         }
 
-        return $this->endpoint->getScheme() . '://' . $host . '/' . $path;
+        return $this->endpoint->getScheme() . '://' . $host . '/' . implode('/', $paths);
     }
 }
