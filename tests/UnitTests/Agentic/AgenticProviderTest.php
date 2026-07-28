@@ -119,6 +119,78 @@ class AgenticProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testMissingRequiredFields()
+    {
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, 'my-bucket');
+
+        // missing accountId
+        $p1 = new AgenticProvider($this->newEndpoint(), '', 'cn-hangzhou', 'ab-apsr');
+        try {
+            $p1->buildUrl($input);
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('AccountId', $e->getMessage());
+        }
+        try {
+            $p1->buildBucketName($input);
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('AccountId', $e->getMessage());
+        }
+
+        // missing region
+        $p2 = new AgenticProvider($this->newEndpoint(), '1234567890', '', 'ab-apsr');
+        try {
+            $p2->buildUrl($input);
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('Region', $e->getMessage());
+        }
+        try {
+            $p2->buildBucketName($input);
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('Region', $e->getMessage());
+        }
+
+        // no bucket: validation is skipped, no error
+        $this->assertNull($p2->buildBucketName(new OperationInput('ListAgenticBuckets', 'GET')));
+    }
+
+    public function testHostLabelTooLong()
+    {
+        // full name = "{bucket}-1234567890-cn-hangzhou-ab-apsr" -> len(bucket) + 31
+        $suffixPart = '-1234567890-cn-hangzhou-ab-apsr';
+        $vh = new AgenticProvider($this->newEndpoint(), '1234567890', 'cn-hangzhou', 'ab-apsr');
+
+        // boundary: full name == 63 (bucket 32) is allowed in virtual-hosted style
+        $okName = str_repeat('a', 32);
+        $this->assertEquals(63, strlen($okName . $suffixPart));
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, $okName);
+        $this->assertEquals(
+            'https://' . $okName . $suffixPart . '.oss-cn-hangzhou.aliyuncs.com/',
+            $vh->buildUrl($input)
+        );
+
+        // over limit: full name == 64 (bucket 33) is rejected in virtual-hosted style
+        $longName = str_repeat('a', 33);
+        $this->assertEquals(64, strlen($longName . $suffixPart));
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, $longName);
+        try {
+            $vh->buildUrl($input);
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('exceeds the maximum length of 63 characters', $e->getMessage());
+        }
+
+        // path style has no DNS label limit, so the same long name is fine
+        $path = new AgenticProvider($this->newEndpoint(), '1234567890', 'cn-hangzhou', 'ab-apsr', 'path');
+        $this->assertEquals(
+            'https://oss-cn-hangzhou.aliyuncs.com/' . $longName . $suffixPart . '/',
+            $path->buildUrl($input)
+        );
+    }
+
     private function reflectClientImpl(AgenticBucketClient $client)
     {
         $ro = new \ReflectionObject($client);

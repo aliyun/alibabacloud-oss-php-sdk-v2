@@ -113,6 +113,12 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
         if ($prefix === null || $prefix === '') {
             return null;
         }
+        if ($this->accountId === '') {
+            throw new \InvalidArgumentException('missing required field, AccountId');
+        }
+        if ($this->region === '') {
+            throw new \InvalidArgumentException('missing required field, Region');
+        }
         return sprintf('%s-%s-%s-%s', $prefix, $this->accountId, $this->region, $this->suffix);
     }
 
@@ -143,7 +149,12 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
                     }
                     break;
                 default:
-                    $host = $this->buildBucketName($input) . '.' . $authority;
+                    $fullName = $this->buildBucketName($input);
+                    if (strlen($fullName) > 63) {
+                        throw new \InvalidArgumentException(sprintf(
+                            'the host label "%s" exceeds the maximum length of 63 characters', $fullName));
+                    }
+                    $host = $fullName . '.' . $authority;
                     break;
             }
         }
