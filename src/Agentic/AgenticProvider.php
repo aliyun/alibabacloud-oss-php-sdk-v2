@@ -19,6 +19,11 @@ use Psr\Http\Message\UriInterface;
 final class AgenticProvider implements EndpointProvider, BucketNameResolver
 {
     /**
+     * The literal segment that replaces `{accountId}-{region}` in the short host label.
+     */
+    private const ALIAS_TOKEN = 'alias';
+
+    /**
      * The base endpoint whose scheme and authority the request URL is built from.
      * @var UriInterface
      */
@@ -44,8 +49,9 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
     private string $suffix;
 
     /**
-     * The address style ('virtual' or 'path') that decides where the physical
-     * bucket name is placed: as a host label (virtual-hosted) or in the path (path-style).
+     * The address style ('virtual', 'path' or 'virtual-alias') that decides where the
+     * physical bucket name is placed: as a host label (virtual-hosted), in the path
+     * (path-style), or replaced by the short alias label (virtual-alias).
      * @var string
      */
     private string $addressStyle;
@@ -56,7 +62,7 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
      * @param string $accountId The account id used to derive the physical bucket name.
      * @param string $region The region used to derive the physical bucket name.
      * @param string $suffix The physical bucket name suffix (e.g. `ab-apsr` or `bs-apsr`).
-     * @param string $addressStyle The address style ('virtual' or 'path').
+     * @param string $addressStyle The address style ('virtual', 'path' or 'virtual-alias').
      */
     public function __construct(UriInterface $endpoint, string $accountId, string $region, string $suffix, string $addressStyle = 'virtual')
     {
@@ -88,11 +94,14 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
 
         $accountId = $config->getAccountId() ?? '';
         $region = $config->getRegion() ?? '';
-        $options['option_funcs'] = static function (array &$opts) use ($accountId, $region, $suffix) {
+        // The caller's own options are resolved after the option funcs run, so pick the
+        // requested style up here; otherwise only the config-derived one would be visible.
+        $requestedStyle = $options['address_style'] ?? null;
+        $options['option_funcs'] = static function (array &$opts) use ($accountId, $region, $suffix, $requestedStyle) {
             if (!isset($opts['endpoint'])) {
                 return;
             }
-            $addressStyle = $opts['address_style'] ?? 'virtual';
+            $addressStyle = $requestedStyle ?? $opts['address_style'] ?? 'virtual';
             $provider = new AgenticProvider($opts['endpoint'], $accountId, $region, $suffix, $addressStyle);
             $opts['endpoint_provider'] = $provider;
             $opts['bucket_name_resolver'] = $provider;
@@ -147,6 +156,14 @@ final class AgenticProvider implements EndpointProvider, BucketNameResolver
                     if ($input->getKey() === null || $input->getKey() === '') {
                         array_push($paths, '');
                     }
+                    break;
+                case 'virtual-alias':
+                    $label = sprintf('%s-%s-%s', $bucket, self::ALIAS_TOKEN, $this->suffix);
+                    if (strlen($label) > 63) {
+                        throw new \InvalidArgumentException(sprintf(
+                            'the host label "%s" exceeds the maximum length of 63 characters', $label));
+                    }
+                    $host = $label . '.' . $authority;
                     break;
                 default:
                     $fullName = $this->buildBucketName($input);

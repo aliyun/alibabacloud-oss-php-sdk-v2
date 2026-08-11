@@ -985,6 +985,21 @@ class ClientImplTest extends \PHPUnit\Framework\TestCase
         $request = $mock->getLastRequest();
         $this->assertEquals('https://oss-cn-beijing.aliyuncs.com/my-bucket/123/321/%2B%3F%20/123.txt', $request->getUri()->__tostring());
 
+        # virtual-alias is agentic-only, the plain client falls back to virtual-hosted
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('cn-beijing');
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $mock = new GuzzleHttp\Handler\MockHandler([new GuzzleHttp\Psr7\Response()]);
+        $client = new ClientImpl($cfg, ['handler' => $mock, 'address_style' => 'virtual-alias']);
+        $input = new OperationInput(
+            "TestApi",
+            "PUT"
+        );
+        $input->setBucket('my-bucket');
+        $client->executeAsync($input)->wait();
+        $request = $mock->getLastRequest();
+        $this->assertEquals('https://my-bucket.oss-cn-beijing.aliyuncs.com/', $request->getUri()->__tostring());
+
         # ip format, no bucket and key, only bucket,  bucket and key
         $cfg = Config::loadDefault();
         $cfg->setRegion('cn-beijing');

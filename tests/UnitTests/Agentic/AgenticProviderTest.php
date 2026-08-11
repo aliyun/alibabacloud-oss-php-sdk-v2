@@ -86,6 +86,118 @@ class AgenticProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testBuildUrlAliasStyle()
+    {
+        $provider = new AgenticProvider($this->newEndpoint(), '1234567890', 'cn-hangzhou', 'ab-apsr', 'virtual-alias');
+
+        // with bucket -> short alias host label, the full name is not in the host
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, 'my-bucket');
+        $this->assertEquals(
+            'https://my-bucket-alias-ab-apsr.oss-cn-hangzhou.aliyuncs.com/',
+            $provider->buildUrl($input)
+        );
+
+        // with bucket and key
+        $input = new OperationInput('GetObject', 'GET', null, null, null, 'my-bucket', 'my-key');
+        $this->assertEquals(
+            'https://my-bucket-alias-ab-apsr.oss-cn-hangzhou.aliyuncs.com/my-key',
+            $provider->buildUrl($input)
+        );
+
+        // without bucket -> bare endpoint authority
+        $input = new OperationInput('ListAgenticBuckets', 'GET');
+        $this->assertEquals(
+            'https://oss-cn-hangzhou.aliyuncs.com/',
+            $provider->buildUrl($input)
+        );
+
+        // bucket space suffix
+        $bs = new AgenticProvider($this->newEndpoint(), '1234567890', 'cn-hangzhou', 'bs-apsr', 'virtual-alias');
+        $input = new OperationInput('GetObject', 'GET', null, null, null, 'my-space', 'test.txt');
+        $this->assertEquals(
+            'https://my-space-alias-bs-apsr.oss-cn-hangzhou.aliyuncs.com/test.txt',
+            $bs->buildUrl($input)
+        );
+    }
+
+    public function testAliasStyleSignsWithFullName()
+    {
+        $provider = new AgenticProvider($this->newEndpoint(), '1234567890', 'cn-hangzhou', 'ab-apsr', 'virtual-alias');
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, 'my-bucket');
+
+        // the short label only shows up in the host; signing keeps the full name
+        $this->assertEquals(
+            'my-bucket-1234567890-cn-hangzhou-ab-apsr',
+            $provider->buildBucketName($input)
+        );
+
+        // so accountId / region stay required
+        $noAccount = new AgenticProvider($this->newEndpoint(), '', 'cn-hangzhou', 'ab-apsr', 'virtual-alias');
+        try {
+            $noAccount->buildBucketName($input);
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('AccountId', $e->getMessage());
+        }
+
+        $noRegion = new AgenticProvider($this->newEndpoint(), '1234567890', '', 'ab-apsr', 'virtual-alias');
+        try {
+            $noRegion->buildBucketName($input);
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('Region', $e->getMessage());
+        }
+    }
+
+    public function testAliasHostLabelTooLong()
+    {
+        // alias label = "{bucket}-alias-ab-apsr" -> len(bucket) + 14
+        $suffixPart = '-alias-ab-apsr';
+        $provider = new AgenticProvider($this->newEndpoint(), '1234567890', 'cn-hangzhou', 'ab-apsr', 'virtual-alias');
+
+        // boundary: label == 63 (bucket 49) is allowed, far more room than the full name has
+        $okName = str_repeat('a', 49);
+        $this->assertEquals(63, strlen($okName . $suffixPart));
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, $okName);
+        $this->assertEquals(
+            'https://' . $okName . $suffixPart . '.oss-cn-hangzhou.aliyuncs.com/',
+            $provider->buildUrl($input)
+        );
+
+        // over limit: label == 64 (bucket 50) is rejected
+        $longName = str_repeat('a', 50);
+        $this->assertEquals(64, strlen($longName . $suffixPart));
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, $longName);
+        try {
+            $provider->buildUrl($input);
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('exceeds the maximum length of 63 characters', $e->getMessage());
+        }
+    }
+
+    public function testClientConstructionWiringAliasStyle()
+    {
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('cn-hangzhou');
+        $cfg->setAccountId('1234567890');
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+
+        $client = new AgenticBucketClient($cfg, ['address_style' => 'virtual-alias']);
+        $sdkOptions = $this->reflectOptions($client, 'sdkOptions');
+
+        $input = new OperationInput('GetAgenticBucket', 'GET', null, null, null, 'my-bucket');
+        $this->assertEquals(
+            'https://my-bucket-alias-ab-apsr.oss-cn-hangzhou.aliyuncs.com/',
+            $sdkOptions['endpoint_provider']->buildUrl($input)
+        );
+        // signing still uses the full name
+        $this->assertEquals(
+            'my-bucket-1234567890-cn-hangzhou-ab-apsr',
+            $sdkOptions['bucket_name_resolver']->buildBucketName($input)
+        );
+    }
+
     public function testClientConstructionWiringPathStyle()
     {
         $cfg = Config::loadDefault();
