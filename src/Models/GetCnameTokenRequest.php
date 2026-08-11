@@ -31,19 +31,29 @@ final class GetCnameTokenRequest extends RequestModel
     public ?string $cname;
 
     /**
+     * Indicates whether the CNAME record is a wildcard domain name.
+     * @var bool|null
+     */
+    #[TagProperty(tag: '', position: 'query', rename: 'wildcard', type: 'bool')]
+    public ?bool $wildcard;
+
+    /**
      * GetCnameTokenRequest constructor.
      * @param string|null $bucket The name of the bucket.
      * @param string|null $cname The name of the CNAME record that is mapped to the bucket.
      * @param array|null $options
+     * @param bool|null $wildcard Indicates whether the CNAME record is a wildcard domain name.
      */
     public function __construct(
         ?string $bucket = null,
         ?string $cname = null,
-        ?array $options = null
+        ?array  $options = null,
+        ?bool   $wildcard = null
     )
     {
         $this->bucket = $bucket;
         $this->cname = $cname;
+        $this->wildcard = $wildcard;
         parent::__construct($options);
     }
 }
