@@ -280,6 +280,8 @@ final class ClientImpl
             $options['address_style'] = 'cname';
         } else if (Utils::safetyBool($config->getUsePathStyle())) {
             $options['address_style'] = 'path';
+        } else if (Utils::safetyBool($config->getUseVirtualHostedAlias())) {
+            $options['address_style'] = 'virtual-alias';
         } else {
             $options['address_style'] = 'virtual';
         }

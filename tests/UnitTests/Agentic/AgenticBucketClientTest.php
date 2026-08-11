@@ -85,4 +85,60 @@ class AgenticBucketClientTest extends \PHPUnit\Framework\TestCase
             $request->getUri()->getHost()
         );
     }
+
+    public function testHostRoutingUseVirtualHostedAlias()
+    {
+        $cfg = $this->newConfig();
+        // sign for real so the alias host also exercises the signing path
+        $cfg->setCredentialsProvider(new Credentials\StaticCredentialsProvider('ak', 'sk'));
+        $cfg->setUseVirtualHostedAlias(true);
+
+        $mock = new GuzzleHttp\Handler\MockHandler([new GuzzleHttp\Psr7\Response()]);
+        $client = new AgenticBucketClient($cfg, ['handler' => $mock]);
+
+        $client->getAgenticBucket(new Models\GetAgenticBucketRequest('my-bucket'));
+
+        $request = $mock->getLastRequest();
+        $this->assertEquals('https', $request->getUri()->getScheme());
+        $this->assertEquals(
+            'my-bucket-alias-ab-apsr.oss-cn-hangzhou.aliyuncs.com',
+            $request->getUri()->getHost()
+        );
+        $this->assertStringStartsWith('OSS4-HMAC-SHA256 ', $request->getHeaderLine('Authorization'));
+    }
+
+    public function testUseVirtualHostedAliasStillRequiresAccountId()
+    {
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('cn-hangzhou');
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $cfg->setUseVirtualHostedAlias(true);
+
+        $mock = new GuzzleHttp\Handler\MockHandler([new GuzzleHttp\Psr7\Response()]);
+        $client = new AgenticBucketClient($cfg, ['handler' => $mock]);
+
+        try {
+            $client->getAgenticBucket(new Models\GetAgenticBucketRequest('my-bucket'));
+            $this->assertTrue(false, "should not here");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertStringContainsString('AccountId', $e->getMessage());
+        }
+        $this->assertNull($mock->getLastRequest());
+    }
+
+    public function testUsePathStyleWinsOverVirtualHostedAlias()
+    {
+        $cfg = $this->newConfig();
+        $cfg->setUsePathStyle(true);
+        $cfg->setUseVirtualHostedAlias(true);
+
+        $mock = new GuzzleHttp\Handler\MockHandler([new GuzzleHttp\Psr7\Response()]);
+        $client = new AgenticBucketClient($cfg, ['handler' => $mock]);
+
+        $client->getAgenticBucket(new Models\GetAgenticBucketRequest('my-bucket'));
+
+        $request = $mock->getLastRequest();
+        $this->assertEquals('oss-cn-hangzhou.aliyuncs.com', $request->getUri()->getHost());
+        $this->assertEquals('/my-bucket-1234567890-cn-hangzhou-ab-apsr/', $request->getUri()->getPath());
+    }
 }

@@ -94,6 +94,11 @@ final class Config
     private $usePathStyle;
 
     /**
+     * @var ?bool If the endpoint is a short-alias host, set this flag to true
+     */
+    private $useVirtualHostedAlias;
+
+    /**
      * @var ?int Specifies the maximum number attempts an API client will call
      *           an operation that fails with a retryable error.
      */
@@ -157,6 +162,7 @@ final class Config
      * @param string|null $cloudBoxId
      * @param bool|null $enableAutoDetectCloudBoxId
      * @param string|null $accountId
+     * @param bool|null $useVirtualHostedAlias
      */
     public function __construct(
         ?string $region = null,
@@ -179,7 +185,8 @@ final class Config
         ?array $additionalHeaders = null,
         ?string $cloudBoxId = null,
         ?bool $enableAutoDetectCloudBoxId = null,
-        ?string $accountId = null
+        ?string $accountId = null,
+        ?bool $useVirtualHostedAlias = null
     )
     {
         $this->region = $region;
@@ -196,6 +203,7 @@ final class Config
         $this->useInternalEndpoint = $useInternalEndpoint;
         $this->useCname = $useCname;
         $this->usePathStyle = $usePathStyle;
+        $this->useVirtualHostedAlias = $useVirtualHostedAlias;
         $this->retryMaxAttempts = $retryMaxAttempts;
         $this->retryer = $retryer;
         $this->userAgent = $userAgent;
@@ -566,6 +574,30 @@ final class Config
     public function setUsePathStyle(bool $usePathStyle)
     {
         $this->usePathStyle = $usePathStyle;
+
+        return $this;
+    }
+
+    /**
+     * Get whether the endpoint is a short-alias host.
+     *
+     * @return  ?bool
+     */
+    public function getUseVirtualHostedAlias()
+    {
+        return $this->useVirtualHostedAlias;
+    }
+
+    /**
+     * Set whether the endpoint is a short-alias host.
+     *
+     * @param  ?bool $useVirtualHostedAlias If the endpoint is a short-alias host, set this flag to true
+     *
+     * @return  self
+     */
+    public function setUseVirtualHostedAlias(bool $useVirtualHostedAlias)
+    {
+        $this->useVirtualHostedAlias = $useVirtualHostedAlias;
 
         return $this;
     }

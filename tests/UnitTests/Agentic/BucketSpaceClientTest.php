@@ -7,9 +7,11 @@ use AlibabaCloud\Oss\V2\Agentic\BucketSpaceClient;
 use AlibabaCloud\Oss\V2\Client;
 use AlibabaCloud\Oss\V2\Config;
 use AlibabaCloud\Oss\V2\Credentials;
+use AlibabaCloud\Oss\V2\Models;
 use AlibabaCloud\Oss\V2\OperationInput;
 use AlibabaCloud\Oss\V2\Types\BucketNameResolver;
 use AlibabaCloud\Oss\V2\Types\EndpointProvider;
+use GuzzleHttp;
 
 class BucketSpaceClientTest extends \PHPUnit\Framework\TestCase
 {
@@ -71,6 +73,30 @@ class BucketSpaceClientTest extends \PHPUnit\Framework\TestCase
             'https://my-space-1234567890-cn-hangzhou-bs-apsr.oss-cn-hangzhou.aliyuncs.com/my-key',
             $sdkOptions['endpoint_provider']->buildUrl($input)
         );
+    }
+
+    public function testHostRoutingUseVirtualHostedAlias()
+    {
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('cn-hangzhou');
+        $cfg->setAccountId('1234567890');
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $cfg->setUseVirtualHostedAlias(true);
+
+        $mock = new GuzzleHttp\Handler\MockHandler([new GuzzleHttp\Psr7\Response()]);
+        $client = BucketSpaceClient::newClient($cfg, ['handler' => $mock]);
+
+        $request = new Models\PutObjectRequest('my-space', 'test.txt');
+        $request->body = GuzzleHttp\Psr7\Utils::streamFor('hello');
+        $client->putObject($request);
+
+        $httpRequest = $mock->getLastRequest();
+        $this->assertEquals('PUT', $httpRequest->getMethod());
+        $this->assertEquals(
+            'my-space-alias-bs-apsr.oss-cn-hangzhou.aliyuncs.com',
+            $httpRequest->getUri()->getHost()
+        );
+        $this->assertEquals('/test.txt', $httpRequest->getUri()->getPath());
     }
 
     public function testUpdateUserAgent()

@@ -353,6 +353,37 @@ class ClientImplTest extends \PHPUnit\Framework\TestCase
         $sdkOptions = $pSdkOptions->getValue($client);
         $this->assertEquals('cname', $sdkOptions['address_style']);
 
+        //set virtual-hosted-alias
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('cn-beijing');
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $cfg->setUseVirtualHostedAlias(true);
+
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        if (PHP_VERSION_ID < 80100) {
+            $pSdkOptions->setAccessible(true);
+        }
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals('virtual-alias', $sdkOptions['address_style']);
+
+        //path-style takes precedence over virtual-hosted-alias
+        $cfg = Config::loadDefault();
+        $cfg->setRegion('cn-beijing');
+        $cfg->setCredentialsProvider(new Credentials\AnonymousCredentialsProvider());
+        $cfg->setUsePathStyle(true);
+        $cfg->setUseVirtualHostedAlias(true);
+
+        $client = new ClientImpl($cfg);
+        $ro = new \ReflectionObject($client);
+        $pSdkOptions = $ro->getProperty('sdkOptions');
+        if (PHP_VERSION_ID < 80100) {
+            $pSdkOptions->setAccessible(true);
+        }
+        $sdkOptions = $pSdkOptions->getValue($client);
+        $this->assertEquals('path', $sdkOptions['address_style']);
+
         //use ip endpoint 
         $cfg = Config::loadDefault();
         $cfg->setRegion('cn-beijing');
