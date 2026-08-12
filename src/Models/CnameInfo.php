@@ -64,7 +64,7 @@ final class CnameInfo extends Model
         ?string           $lastModified = null,
         ?string           $status = null,
         ?CnameCertificate $certificate = null,
-        ?bool             $isWildCard = null,
+        ?bool             $isWildCard = null
     )
     {
         $this->domain = $domain;
