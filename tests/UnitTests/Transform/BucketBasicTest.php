@@ -56,9 +56,26 @@ BBB;
         $this->assertEquals('IA', $xml->StorageClass);
         $this->assertEquals('LRS', $xml->DataRedundancyType);
 
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
+
         // extend header & parameters
         $request = new Models\PutBucketRequest(
             'bucket-123',
+            null,
             null,
             null,
             null,
@@ -116,6 +133,22 @@ BBB;
         $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
 
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
+
         // extend header & parameters
         $request = new Models\DeleteBucketRequest(
             'bucket-123',
@@ -172,6 +205,22 @@ BBB;
         $this->assertEquals('bucket-123', $input->getBucket());
         $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
+
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
 
         // extend header & parameters
         $request = new Models\GetBucketInfoRequest(
@@ -252,6 +301,8 @@ BBB;
         $this->assertNull($result->bucketInfo->crossRegionReplication);
         $this->assertNull($result->bucketInfo->comment);
         $this->assertNull($result->bucketInfo->blockPublicAccess);
+        $this->assertNull($result->bucketInfo->bucketResourceType);
+        $this->assertNull($result->bucketInfo->agenticBucketName);
 
 
         // xml
@@ -287,6 +338,8 @@ BBB;
                     <LogPrefix>log/</LogPrefix>
                 </BucketPolicy>
                 <BlockPublicAccess>true</BlockPublicAccess>
+                <BucketResourceType>AgenticBucketSpace</BucketResourceType>
+                <AgenticBucketName>my-agentic-1234567890-cn-hangzhou-ab-apsr</AgenticBucketName>
             </Bucket>
             </BucketInfo>';
 
@@ -330,6 +383,8 @@ BBB;
         $this->assertEquals('examplebucket', $result->bucketInfo->bucketPolicy->logBucket);
         $this->assertEquals('log/', $result->bucketInfo->bucketPolicy->logPrefix);
         $this->assertEquals(true, $result->bucketInfo->blockPublicAccess);
+        $this->assertEquals('AgenticBucketSpace', $result->bucketInfo->bucketResourceType);
+        $this->assertEquals('my-agentic-1234567890-cn-hangzhou-ab-apsr', $result->bucketInfo->agenticBucketName);
 
         // xml
         $str = '<?xml version="1.0" encoding="UTF-8"?>
@@ -402,6 +457,22 @@ BBB;
         $this->assertEquals('bucket-123', $input->getBucket());
         $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
+
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
 
         // extend header & parameters
         $request = new Models\GetBucketLocationRequest(
@@ -485,6 +556,22 @@ BBB;
         $this->assertEquals('bucket-123', $input->getBucket());
         $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
+
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
 
         // extend header & parameters
         $request = new Models\GetBucketStatRequest(
@@ -687,6 +774,22 @@ BBB;
         $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
 
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
+
         // extend header & parameters
         $request = new Models\GetBucketVersioningRequest(
             'bucket-123',
@@ -815,6 +918,22 @@ BBB;
         $this->assertEquals(1, $xml->count());
         $this->assertEquals('Enabled', $xml->Status);
 
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
+
         // extend header & parameters
         $request = new Models\PutBucketVersioningRequest(
             'bucket-123',
@@ -885,6 +1004,22 @@ BBB;
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
         $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
 
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
+
         // extend header & parameters
         $request = new Models\PutBucketAclRequest(
             'bucket-123',
@@ -943,6 +1078,22 @@ BBB;
         $this->assertEquals('bucket-123', $input->getBucket());
         $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
         $this->assertEquals('1B2M2Y8AsgTpgAmY7PhCfg==', $input->getHeaders()['content-md5']);
+
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
 
         // extend header & parameters
         $request = new Models\GetBucketAclRequest(
@@ -1085,6 +1236,22 @@ BBB;
         $this->assertEquals('123', $input->getParameters()['max-keys']);
         $this->assertEquals('prefix-123', $input->getParameters()['prefix']);
         $this->assertEquals('requester', $input->getHeaders()['x-oss-request-payer']);
+
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
 
         // extend header & parameters
         $request = new Models\ListObjectsRequest(
@@ -1402,6 +1569,22 @@ BBB;
         $this->assertEquals('prefix-123', $input->getParameters()['prefix']);
         $this->assertEquals('requester', $input->getHeaders()['x-oss-request-payer']);
         $this->assertEquals('true', $input->getParameters()['fetch-owner']);
+
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
 
         // extend header & parameters
         $request = new Models\ListObjectsV2Request(
@@ -1731,6 +1914,22 @@ BBB;
         $this->assertEquals('123', $input->getParameters()['max-keys']);
         $this->assertEquals('prefix-123', $input->getParameters()['prefix']);
         $this->assertEquals('requester', $input->getHeaders()['x-oss-request-payer']);
+
+        // with agenticBucket
+        $request = new Models\PutBucketRequest(
+            'bucket-123',
+            Models\BucketACLType::PRIVATE,
+            'rg-123',
+            null,
+            'my-agentic-bucket'
+        );
+        $input = BucketBasic::fromPutBucket($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('application/xml', $input->getHeaders()['content-type']);
+        $this->assertEquals(Models\BucketACLType::PRIVATE, $input->getHeaders()['x-oss-acl']);
+        $this->assertEquals('rg-123', $input->getHeaders()['x-oss-resource-group-id']);
+        $this->assertEquals('my-agentic-bucket', $input->getHeaders()['x-oss-agentic-bucket']);
+        $this->assertNull($input->getBody());
 
         // extend header & parameters
         $request = new Models\ListObjectVersionsRequest(
@@ -2412,3 +2611,5 @@ BBB;
         return str_replace("\n", "", str_replace("\r", "", $xml));
     }
 }
+
+

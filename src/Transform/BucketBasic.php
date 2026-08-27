@@ -42,6 +42,10 @@ final class BucketBasic
                     $input->setHeader('x-oss-resource-group-id', $request->resourceGroupId);
                 }
 
+                if (isset($request->agenticBucket)) {
+                    $input->setHeader('x-oss-agentic-bucket', $request->agenticBucket);
+                }
+
                 if (isset($request->createBucketConfiguration)) {
                     $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><CreateBucketConfiguration></CreateBucketConfiguration>');
                     if (isset($request->createBucketConfiguration->storageClass)) {
@@ -383,6 +387,8 @@ final class BucketBasic
                 ) : null;
                 $info->comment = Functions::tryToString($xml->Comment);
                 $info->blockPublicAccess = Functions::tryToBool($xml->BlockPublicAccess);
+                $info->bucketResourceType = Functions::tryToString($xml->BucketResourceType);
+                $info->agenticBucketName = Functions::tryToString($xml->AgenticBucketName);
                 $result->bucketInfo = $info;
             },
         ];

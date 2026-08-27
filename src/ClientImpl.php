@@ -26,11 +26,14 @@ final class ClientImpl
         'feature_flags' => 0,
         'additional_headers' => null,
         'response_stream' => null,
+        'bucket_name_resolver' => null,
+        'endpoint_provider' => null,
     ];
 
     private $innerOptions = [
         'handler' => null,
         'user_agent' => null,
+        'init_error' => null,
     ];
 
     // guzzle
@@ -49,8 +52,29 @@ final class ClientImpl
     public function __construct(Config $config, array $options = [])
     {
         $this->resolveConfig($config);
+        $this->applyOptionFuncs($options);
         $this->resolveOptions($options);
         $this->applyOptions();
+    }
+
+    /**
+     * Runs caller-provided customizers after the config has been resolved, so they
+     * can wire options that depend on resolved values such as the endpoint.
+     * Mirrors the Java SDK's ClientOptions option functions.
+     * @param array $options
+     */
+    private function applyOptionFuncs(array &$options)
+    {
+        if (!isset($options['option_funcs'])) {
+            return;
+        }
+        $funcs = $options['option_funcs'];
+        unset($options['option_funcs']);
+        foreach (\is_array($funcs) ? $funcs : [$funcs] as $fn) {
+            if (\is_callable($fn)) {
+                $fn($this->sdkOptions);
+            }
+        }
     }
 
     public function executeAsync(OperationInput &$input, array &$options = []): GuzzleHttp\Promise\PromiseInterface
@@ -184,10 +208,28 @@ final class ClientImpl
         // user-agent
         $this->innerOptions['user_agent'] = $this->buildUserAgent($config);
 
+        // deferred init error, surfaced when an operation is invoked
+        $this->innerOptions['init_error'] = $this->resolveInitError($config);
+
         // guzzle's client
         $options = $this->requestOptions;
         $this->resolveHttpClient($config, $options);
         $this->requestOptions = $options;
+    }
+
+    /**
+     * Validates configuration that should not fail client construction but instead
+     * be surfaced when an operation is invoked.
+     * @param Config $config
+     * @return \Throwable|null the deferred error, or null if the configuration is valid
+     */
+    private function resolveInitError(Config &$config): ?\Throwable
+    {
+        $accountId = Utils::safetyString($config->getAccountId());
+        if ($accountId !== '' && !Validation::isValidAccountId($accountId)) {
+            return new \InvalidArgumentException('invalid account id: ' . $accountId . ', must be pure digits');
+        }
+        return null;
     }
 
     private function resolveEndpoint(Config &$config, array &$options)
@@ -238,6 +280,8 @@ final class ClientImpl
             $options['address_style'] = 'cname';
         } else if (Utils::safetyBool($config->getUsePathStyle())) {
             $options['address_style'] = 'path';
+        } else if (Utils::safetyBool($config->getUseVirtualHostedAlias())) {
+            $options['address_style'] = 'virtual-alias';
         } else {
             $options['address_style'] = 'virtual';
         }
@@ -515,6 +559,11 @@ final class ClientImpl
 
     private function verifyOperation(OperationInput &$input)
     {
+        // surface deferred initialization error, if any
+        if (isset($this->innerOptions['init_error'])) {
+            throw $this->innerOptions['init_error'];
+        }
+
         if (!isset($this->sdkOptions['endpoint'])) {
             throw new \InvalidArgumentException('endpoint is invalid.');
         }
@@ -598,9 +647,14 @@ final class ClientImpl
         /**
          * @var \Psr\Http\Message\UriInterface $endpoint
          */
-        $endpoint = $this->sdkOptions['endpoint'];
-        $baseuri = $endpoint->getScheme() . "://" . $endpoint->getAuthority();
-        $uri = $this->buildUri($input, new GuzzleHttp\Psr7\Uri($baseuri));
+        if (isset($this->sdkOptions['endpoint_provider']) &&
+            ($built = $this->sdkOptions['endpoint_provider']->buildUrl($input)) !== null) {
+            $uri = new GuzzleHttp\Psr7\Uri($built);
+        } else {
+            $endpoint = $this->sdkOptions['endpoint'];
+            $baseuri = $endpoint->getScheme() . "://" . $endpoint->getAuthority();
+            $uri = $this->buildUri($input, new GuzzleHttp\Psr7\Uri($baseuri));
+        }
         $query = $input->getParameters();
         if (!empty($query)) {
             $uri = $uri->withQuery(
@@ -645,6 +699,10 @@ final class ClientImpl
             $input->getKey(),
             $request
         );
+        // resolve bucket name for signing only; keep input bucket as the logical name
+        if (isset($this->sdkOptions['bucket_name_resolver']) && $input->getBucket() !== null) {
+            $signingContext->bucket = $this->sdkOptions['bucket_name_resolver']->buildBucketName($input);
+        }
         if (isset($this->sdkOptions['additional_headers'])) {
             $signingContext->additionalHeaders = $this->sdkOptions['additional_headers'];
         }

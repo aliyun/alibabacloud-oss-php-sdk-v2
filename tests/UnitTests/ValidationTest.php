@@ -41,4 +41,15 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(Validation::isValidObjectName(str_repeat('a', 1023)));
         $this->assertFalse(Validation::isValidObjectName(str_repeat('a', 1024)));
     }
+
+    public function testIsValidAccountId()
+    {
+        $this->assertTrue(Validation::isValidAccountId("1234567890"));
+        $this->assertTrue(Validation::isValidAccountId("0"));
+        $this->assertFalse(Validation::isValidAccountId(""));
+        $this->assertFalse(Validation::isValidAccountId("abc"));
+        $this->assertFalse(Validation::isValidAccountId("123abc"));
+        $this->assertFalse(Validation::isValidAccountId("123-456"));
+        $this->assertFalse(Validation::isValidAccountId("123 456"));
+    }
 }

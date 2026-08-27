@@ -43,23 +43,34 @@ final class CnameInfo extends Model
     #[XmlElement(rename: 'Certificate', type: CnameCertificate::class)]
     public ?CnameCertificate $certificate;
 
+
+    /**
+     * Whether the custom domain name is a wildcard domain name.
+     * @var bool|null
+     */
+    #[XmlElement(rename: 'IsWildCard', type: 'bool')]
+    public ?bool $isWildCard;
+
     /**
      * CnameInfo constructor.
      * @param string|null $domain The custom domain name.
      * @param string|null $lastModified The time when the custom domain name was mapped.
      * @param string|null $status The status of the domain name.
      * @param CnameCertificate|null $certificate The container in which the certificate information is stored.
+     * @param bool|null $isWildCard Whether the custom domain name is a wildcard domain name.
      */
     public function __construct(
-        ?string $domain = null,
-        ?string $lastModified = null,
-        ?string $status = null,
-        ?CnameCertificate $certificate = null
+        ?string           $domain = null,
+        ?string           $lastModified = null,
+        ?string           $status = null,
+        ?CnameCertificate $certificate = null,
+        ?bool             $isWildCard = null
     )
     {
         $this->domain = $domain;
         $this->lastModified = $lastModified;
         $this->status = $status;
         $this->certificate = $certificate;
+        $this->isWildCard = $isWildCard;
     }
 }
