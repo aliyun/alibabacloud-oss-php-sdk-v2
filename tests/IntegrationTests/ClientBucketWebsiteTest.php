@@ -30,6 +30,9 @@ class ClientBucketWebsiteTest extends TestIntegration
         $this->assertEquals(True, count($putResult->headers) > 0);
         $this->assertEquals(24, strlen($putResult->requestId));
 
+        // the website configuration is not readable immediately after being written
+        $this->waitFor(5);
+
         // GetBucketWebsite
         $getResult = $client->getBucketWebsite(new Oss\Models\GetBucketWebsiteRequest(
             $bucketName
