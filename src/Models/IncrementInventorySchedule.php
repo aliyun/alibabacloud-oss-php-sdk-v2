@@ -16,10 +16,10 @@ final class IncrementInventorySchedule extends Model
 
     /**
      * Describes the frequency at which incremental inventory files are exported.
-     * @var string|null
+     * @var int|null
      */
     #[XmlElement(rename: 'Frequency', type: 'int')]
-    public ?string $frequency;
+    public ?int $frequency;
 
     /**
      * IncrementInventorySchedule constructor.
