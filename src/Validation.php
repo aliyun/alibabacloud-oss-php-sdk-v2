@@ -53,4 +53,18 @@ final class Validation
         }
         return true;
     }
+
+    /**
+     * Checks if the account id is valid
+     * account id naming rules:
+     * 1. Must be a non-empty string of pure digits
+     */
+    public static function isValidAccountId(string $accountId): bool
+    {
+        $pattern = '/^[0-9]+$/';
+        if (!preg_match($pattern, $accountId)) {
+            return false;
+        }
+        return true;
+    }
 }

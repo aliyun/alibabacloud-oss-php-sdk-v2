@@ -73,6 +73,22 @@ BBB;
 <?xml version="1.0" encoding="UTF-8"?><BucketCnameConfiguration><Cname><Domain>example.com</Domain><CertificateConfiguration><DeleteCertificate>true</DeleteCertificate></CertificateConfiguration></Cname></BucketCnameConfiguration>
 BBB;
         $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
+
+        $request = new Models\PutCnameRequest('bucket-123', new Models\BucketCnameConfiguration(
+            new Models\Cname(
+                domain: 'example.com',
+                certificateConfiguration: new Models\CertificateConfiguration(
+                    deleteCertificate: true,
+                ),
+                isWildCard: true
+            ),
+        ));
+        $input = BucketCname::fromPutCname($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $xml = <<<BBB
+<?xml version="1.0" encoding="UTF-8"?><BucketCnameConfiguration><Cname><Domain>example.com</Domain><CertificateConfiguration><DeleteCertificate>true</DeleteCertificate></CertificateConfiguration><IsWildCard>true</IsWildCard></Cname></BucketCnameConfiguration>
+BBB;
+        $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
     }
 
     public function testToPutCname()
@@ -128,6 +144,21 @@ BBB;
 <?xml version="1.0" encoding="UTF-8"?><BucketCnameConfiguration><Cname><Domain>example.com</Domain></Cname></BucketCnameConfiguration>
 BBB;
         $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
+
+        $request = new Models\CreateCnameTokenRequest('bucket-123', new Models\BucketCnameConfiguration(
+            new Models\Cname(
+                domain: 'example.com',
+            ),
+        ),
+            options: ['parameters' => ['wildcard' => 'true']],
+        );
+        $input = BucketCname::fromCreateCnameToken($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $xml = <<<BBB
+<?xml version="1.0" encoding="UTF-8"?><BucketCnameConfiguration><Cname><Domain>example.com</Domain></Cname></BucketCnameConfiguration>
+BBB;
+        $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
+        $this->assertEquals($input->getParameters()["wildcard"], "true");
     }
 
     public function testToCreateCnameToken()
@@ -188,6 +219,12 @@ BBB;
         $input = BucketCname::fromGetCnameToken($request);
         $this->assertEquals('bucket-123', $input->getBucket());
         $this->assertEquals('example.com', $input->getParameters()['cname']);
+
+        $request = new Models\GetCnameTokenRequest('bucket-123', 'example.com', wildcard: false);
+        $input = BucketCname::fromGetCnameToken($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $this->assertEquals('example.com', $input->getParameters()['cname']);
+        $this->assertEquals('false', $input->getParameters()['wildcard']);
     }
 
     public function testToGetCnameToken()
@@ -280,6 +317,12 @@ BBB;
     <LastModified>2021-09-15T02:50:34.000Z</LastModified>
     <Status>Enabled</Status>
   </Cname>
+  <Cname>
+    <Domain>example.net</Domain>
+    <LastModified>2021-09-15T02:50:34.000Z</LastModified>
+    <Status>Enabled</Status>
+    <IsWildCard>true</IsWildCard>
+  </Cname>
 </ListCnameResult>';
         $output = new OperationOutput(
             'OK',
@@ -296,7 +339,7 @@ BBB;
         $this->assertEquals('application/xml', $result->headers['content-type']);
         $this->assertEquals('bucket', $result->bucket);
         $this->assertEquals('owner', $result->owner);
-        $this->assertEquals(3, count($result->cnames));
+        $this->assertEquals(4, count($result->cnames));
         $this->assertEquals('example.com', $result->cnames[0]->domain);
         $this->assertEquals('2021-09-15T02:35:07.000Z', $result->cnames[0]->lastModified);
         $this->assertEquals('Enabled', $result->cnames[0]->status);
@@ -313,6 +356,10 @@ BBB;
         $this->assertEquals('example.edu', $result->cnames[2]->domain);
         $this->assertEquals('2021-09-15T02:50:34.000Z', $result->cnames[2]->lastModified);
         $this->assertEquals('Enabled', $result->cnames[2]->status);
+        $this->assertEquals('example.net', $result->cnames[3]->domain);
+        $this->assertEquals('2021-09-15T02:50:34.000Z', $result->cnames[3]->lastModified);
+        $this->assertEquals('Enabled', $result->cnames[3]->status);
+        $this->assertEquals('true', $result->cnames[3]->isWildCard);
     }
 
     public function testFromDeleteCname()
@@ -345,6 +392,22 @@ BBB;
 <?xml version="1.0" encoding="UTF-8"?><BucketCnameConfiguration><Cname><Domain>example.com</Domain></Cname></BucketCnameConfiguration>
 BBB;
         $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
+
+        $request = new Models\DeleteCnameRequest('bucket-123', new Models\BucketCnameConfiguration(
+            new Models\Cname(
+                domain: 'example.com'
+            ),
+
+        ),
+            options: ['parameters' => ['wildcard' => 'true']],
+        );
+        $input = BucketCname::fromDeleteCname($request);
+        $this->assertEquals('bucket-123', $input->getBucket());
+        $xml = <<<BBB
+<?xml version="1.0" encoding="UTF-8"?><BucketCnameConfiguration><Cname><Domain>example.com</Domain></Cname></BucketCnameConfiguration>
+BBB;
+        $this->assertEquals($xml, $this->cleanXml($input->getBody()->getContents()));
+        $this->assertEquals($input->getParameters()["wildcard"], "true");
     }
 
     public function testToDeleteCname()

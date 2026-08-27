@@ -124,6 +124,18 @@ final class BucketInfo extends Model
      */
     public ?BucketPolicy $bucketPolicy;
 
+    /**
+     * The resource type of the bucket. For a bucket space, the value is `AgenticBucketSpace`.
+     * @var string|null
+     */
+    public ?string $bucketResourceType;
+
+    /**
+     * The agentic bucket name associated with this bucket.
+     * @var string|null
+     */
+    public ?string $agenticBucketName;
+
 
     /**
      * BucketInfo constructor.
@@ -145,6 +157,8 @@ final class BucketInfo extends Model
      * @param string|null $comment The description of the bucket.
      * @param bool|null $blockPublicAccess Indicates whether Block Public Access is enabled for the bucket.
      * @param BucketPolicy|null $bucketPolicy The log configurations of the bucket.
+     * @param string|null $bucketResourceType The resource type of the bucket.
+     * @param string|null $agenticBucketName The agentic bucket name associated with this bucket.
      */
     public function __construct(
         ?string $name = null,
@@ -164,7 +178,9 @@ final class BucketInfo extends Model
         ?string $crossRegionReplication = null,
         ?string $comment = null,
         ?bool $blockPublicAccess = null,
-        ?BucketPolicy $bucketPolicy = null
+        ?BucketPolicy $bucketPolicy = null,
+        ?string $bucketResourceType = null,
+        ?string $agenticBucketName = null
     )
     {
         $this->name = $name;
@@ -185,5 +201,7 @@ final class BucketInfo extends Model
         $this->comment = $comment;
         $this->blockPublicAccess = $blockPublicAccess;
         $this->bucketPolicy = $bucketPolicy;
+        $this->bucketResourceType = $bucketResourceType;
+        $this->agenticBucketName = $agenticBucketName;
     }
 }

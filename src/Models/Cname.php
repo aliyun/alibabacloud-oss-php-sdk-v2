@@ -29,17 +29,28 @@ final class Cname extends Model
     #[XmlElement(rename: 'CertificateConfiguration', type: CertificateConfiguration::class)]
     public ?CertificateConfiguration $certificateConfiguration;
 
+
+    /**
+     * Indicates whether the custom domain name is a wildcard domain name.
+     * @var bool|null
+     */
+    #[XmlElement(rename: 'IsWildCard', type: 'bool')]
+    public ?bool $isWildCard;
+
     /**
      * Cname constructor.
      * @param string|null $domain The custom domain name.
      * @param CertificateConfiguration|null $certificateConfiguration The container for which the certificate is configured.
+     * @param bool|null $isWildCard Indicates whether the custom domain name is a wildcard domain name.
      */
     public function __construct(
         ?string $domain = null,
-        ?CertificateConfiguration $certificateConfiguration = null
+        ?CertificateConfiguration $certificateConfiguration = null,
+        ?bool $isWildCard = null
     )
     {
         $this->domain = $domain;
         $this->certificateConfiguration = $certificateConfiguration;
+        $this->isWildCard = $isWildCard;
     }
 }

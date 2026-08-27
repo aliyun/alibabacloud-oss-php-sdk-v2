@@ -39,11 +39,18 @@ final class PutBucketRequest extends RequestModel
     public ?CreateBucketConfiguration $createBucketConfiguration;
 
     /**
+     * The agentic bucket name.
+     * @var string|null
+     */
+    public ?string $agenticBucket;
+
+    /**
      * PutBucketRequest constructor.
      * @param string|null $bucket The name of the bucket.
      * @param string|null $acl The access control list (ACL) of the bucket to be created.
      * @param string|null $resourceGroupId The ID of the resource group.
      * @param CreateBucketConfiguration|null $createBucketConfiguration The container that stores the request body.
+     * @param string|null $agenticBucket The agentic bucket name.
      * @param array|null $options
      */
     public function __construct(
@@ -51,6 +58,7 @@ final class PutBucketRequest extends RequestModel
         ?string $acl = null,
         ?string $resourceGroupId = null,
         ?CreateBucketConfiguration $createBucketConfiguration = null,
+        ?string $agenticBucket = null,
         ?array $options = null
     )
     {
@@ -58,6 +66,7 @@ final class PutBucketRequest extends RequestModel
         $this->acl = $acl;
         $this->resourceGroupId = $resourceGroupId;
         $this->createBucketConfiguration = $createBucketConfiguration;
+        $this->agenticBucket = $agenticBucket;
         parent::__construct($options);
     }
 }
