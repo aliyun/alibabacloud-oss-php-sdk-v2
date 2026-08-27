@@ -23,14 +23,25 @@ final class InventorySchedule extends Model
     #[XmlElement(rename: 'Frequency', type: 'string')]
     public ?string $frequency;
 
+
+    /**
+     * The day of the month on which the inventory list is exported. This parameter is required if the Frequency is Monthly.
+     * @var int|null
+     */
+    #[XmlElement(rename: 'DayOfMonth', type: 'int')]
+    public ?int $dayOfMonth;
+
     /**
      * InventorySchedule constructor.
      * @param string|null $frequency The frequency at which the inventory list is exported.
+     * @param int|null $dayOfMonth The day of the month on which the inventory list is exported.
      */
     public function __construct(
-        ?string $frequency = null
+        ?string $frequency = null,
+        ?int    $dayOfMonth = null
     )
     {
         $this->frequency = $frequency;
+        $this->dayOfMonth = $dayOfMonth;
     }
 }

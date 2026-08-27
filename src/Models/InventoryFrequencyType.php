@@ -12,4 +12,6 @@ class InventoryFrequencyType
 {
     const DAILY = 'Daily';
     const WEEKLY = 'Weekly';
+    const MONTHLY = 'Monthly';
+    const ONCE    = 'Once';
 }
