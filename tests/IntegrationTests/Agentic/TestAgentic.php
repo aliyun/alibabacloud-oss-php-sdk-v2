@@ -29,8 +29,8 @@ class TestAgentic extends \PHPUnit\Framework\TestCase
     // label, so prefix plus random part must stay within 23 characters
     // (63 - 1 - 16 accountId - 1 - 14 region - 8 for '-ab-apsr').
     // The 'ab' / 'bs' markers are what the reaper filters on.
-    public static $BUCKETNAME_PREFIX = "php-ab-";
-    public static $BUCKETSPACE_NAME_PREFIX = "php-bs-";
+    static $BUCKETNAME_PREFIX;
+    static $BUCKETSPACE_NAME_PREFIX;
 
     /** The tail the service appends to an agentic bucket name. */
     const AGENTIC_BUCKET_SUFFIX = 'ab-apsr';
@@ -54,6 +54,8 @@ class TestAgentic extends \PHPUnit\Framework\TestCase
         self::$ENDPOINT = getenv("OSS_TEST_ENDPOINT");
         self::$REGION = getenv("OSS_TEST_REGION") ?: 'cn-hangzhou';
         self::$ACCOUNT_ID = getenv("OSS_TEST_RAM_UID") ?: getenv("OSS_TEST_USER_ID");
+        self::$BUCKETNAME_PREFIX = self::getBucketNamePrefix();
+        self::$BUCKETSPACE_NAME_PREFIX = self::getBucketSpaceNamePrefix();
 
         // One bucket per test class: a scenario that disables it must not disturb the scenarios of
         // the sibling classes, and PHPUnit gives no ordering guarantee across classes.
@@ -371,5 +373,23 @@ class TestAgentic extends \PHPUnit\Framework\TestCase
     {
         $se = self::findServiceException($e);
         return $se !== null && $se->getErrorCode() === 'SecondLevelDomainForbidden';
+    }
+
+    static function getBucketNamePrefix()
+    {
+        $val = getenv('OSS_TEST_BUCKET_PREFIX');
+        if ($val != '') {
+            return $val;
+        }
+        return 'sdk-oss-test-';
+    }
+
+    static function getBucketSpaceNamePrefix()
+    {
+        $val = getenv('OSS_TEST_BUCKET_SPACE_PREFIX');
+        if ($val != '') {
+            return $val;
+        }
+        return 'sdk-oss-test-';
     }
 }
