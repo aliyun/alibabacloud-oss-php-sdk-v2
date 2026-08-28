@@ -405,7 +405,7 @@ class TestIntegration extends \PHPUnit\Framework\TestCase
     {
         $val = getenv('OSS_TEST_BUCKET_PREFIX');
         if ($val != '') {
-            return $val . 'go-bucket-';
+            return $val . 'php-bucket-';
         }
         return 'sdk-oss-test-php-bucket-';
     }
