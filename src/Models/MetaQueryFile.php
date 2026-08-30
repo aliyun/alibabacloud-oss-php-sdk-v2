@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace AlibabaCloud\Oss\V2\Models;
 
-use AlibabaCloud\Oss\V2\Types\Model;
 use AlibabaCloud\Oss\V2\Annotation\XmlElement;
 use AlibabaCloud\Oss\V2\Annotation\XmlRoot;
+use AlibabaCloud\Oss\V2\Types\Model;
 
 /**
  * Class MetaQueryFile
@@ -330,6 +330,13 @@ final class MetaQueryFile extends Model
     public ?MetaQueryAddresses $addresses;
 
     /**
+     * The description of the file.
+     * @var MetaQueryFileInsights|null
+     */
+    #[XmlElement(rename: 'Insights', type: MetaQueryFileInsights::class)]
+    public ?MetaQueryFileInsights $insights;
+
+    /**
      * MetaQueryFile constructor.
      * @param string|null $filename The full path of the object.
      * @param string|null $fileModifiedTime The time when the object was last modified.
@@ -342,7 +349,7 @@ final class MetaQueryFile extends Model
      * @param string|null $objectACL The access control list (ACL) of the object.
      * @param string|null $serverSideEncryption The server-side encryption of the object.
      * @param string|null $serverSideEncryptionCustomerAlgorithm The server-side encryption algorithm used when the object was created.
-     * @param OSSTagging|null $ossTagging The tags.
+     * @param MetaQueryOssTagging|null $ossTagging The tags.
      * @param MetaQueryOssUserMeta|null $ossUserMeta The user metadata items.
      * @param string|null $accessControlAllowOrigin The origins allowed in cross-origin requests.
      * @param string|null $album The album.
@@ -374,65 +381,55 @@ final class MetaQueryFile extends Model
      * @param string|null $albumArtist The singer.
      * @param float|null $duration The duration of the audio stream in seconds.
      * @param MetaQueryVideoStreams|null $videoStreams The list of video streams.
+     * @param MetaQueryFileInsights|null $insights The description of the file.
      */
     public function __construct(
-        ?string $filename = null,
-        ?string $fileModifiedTime = null,
-        ?string $ossStorageClass = null,
-        ?string $etag = null,
-        ?string $ossCrc64 = null,
-        ?int $ossTaggingCount = null,
-        ?int $size = null,
-        ?string $ossObjectType = null,
-        ?string $objectACL = null,
-        ?string $serverSideEncryption = null,
-        ?string $serverSideEncryptionCustomerAlgorithm = null,
-        ?OSSTagging $ossTagging = null,
-        ?MetaQueryOssUserMeta $ossUserMeta = null,
-        ?string $accessControlAllowOrigin = null,
-        ?string $album = null,
-        ?string $uri = null,
-        ?string $cacheControl = null,
-        ?string $contentEncoding = null,
-        ?int $videoHeight = null,
-        ?int $bitrate = null,
-        ?string $serverSideDataEncryption = null,
-        ?string $serverSideEncryptionKeyId = null,
-        ?string $contentDisposition = null,
-        ?MetaQuerySubtitles $subtitles = null,
-        ?MetaQueryAddresses $addresses = null,
-        ?string $contentType = null,
-        ?string $produceTime = null,
-        ?int $imageHeight = null,
-        ?string $artist = null,
-        ?string $latLong = null,
-        ?int $imageWidth = null,
-        ?string $composer = null,
-        ?string $performer = null,
-        ?string $mediaType = null,
-        ?string $title = null,
-        ?int $videoWidth = null,
+        ?string                $filename = null,
+        ?string                $fileModifiedTime = null,
+        ?string                $ossStorageClass = null,
+        ?string                $etag = null,
+        ?string                $ossCrc64 = null,
+        ?int                   $ossTaggingCount = null,
+        ?int                   $size = null,
+        ?string                $ossObjectType = null,
+        ?string                $objectACL = null,
+        ?string                $serverSideEncryption = null,
+        ?string                $serverSideEncryptionCustomerAlgorithm = null,
+        ?MetaQueryOssTagging   $ossTagging = null,
+        ?MetaQueryOssUserMeta  $ossUserMeta = null,
+        ?string                $accessControlAllowOrigin = null,
+        ?string                $album = null,
+        ?string                $uri = null,
+        ?string                $cacheControl = null,
+        ?string                $contentEncoding = null,
+        ?int                   $videoHeight = null,
+        ?int                   $bitrate = null,
+        ?string                $serverSideDataEncryption = null,
+        ?string                $serverSideEncryptionKeyId = null,
+        ?string                $contentDisposition = null,
+        ?MetaQuerySubtitles    $subtitles = null,
+        ?MetaQueryAddresses    $addresses = null,
+        ?string                $contentType = null,
+        ?string                $produceTime = null,
+        ?int                   $imageHeight = null,
+        ?string                $artist = null,
+        ?string                $latLong = null,
+        ?int                   $imageWidth = null,
+        ?string                $composer = null,
+        ?string                $performer = null,
+        ?string                $mediaType = null,
+        ?string                $title = null,
+        ?int                   $videoWidth = null,
         ?MetaQueryAudioStreams $audioStreams = null,
-        ?string $ossExpiration = null,
-        ?string $accessControlRequestMethod = null,
-        ?string $contentLanguage = null,
-        ?string $albumArtist = null,
-        ?float $duration = null,
-        ?MetaQueryVideoStreams $videoStreams = null
+        ?string                $ossExpiration = null,
+        ?string                $accessControlRequestMethod = null,
+        ?string                $contentLanguage = null,
+        ?string                $albumArtist = null,
+        ?float                 $duration = null,
+        ?MetaQueryVideoStreams $videoStreams = null,
+        ?MetaQueryFileInsights $insights = null
     )
     {
-        $this->filename = $filename;
-        $this->fileModifiedTime = $fileModifiedTime;
-        $this->ossStorageClass = $ossStorageClass;
-        $this->etag = $etag;
-        $this->ossCrc64 = $ossCrc64;
-        $this->ossTaggingCount = $ossTaggingCount;
-        $this->size = $size;
-        $this->ossObjectType = $ossObjectType;
-        $this->objectACL = $objectACL;
-        $this->serverSideEncryption = $serverSideEncryption;
-        $this->serverSideEncryptionCustomerAlgorithm = $serverSideEncryptionCustomerAlgorithm;
-        $this->ossTagging = $ossTagging;
         $this->ossUserMeta = $ossUserMeta;
         $this->accessControlAllowOrigin = $accessControlAllowOrigin;
         $this->album = $album;
@@ -468,7 +465,6 @@ final class MetaQueryFile extends Model
         $this->filename = $filename;
         $this->ossTaggingCount = $ossTaggingCount;
         $this->etag = $etag;
-        $this->ossUserMeta = $ossUserMeta;
         $this->ossExpiration = $ossExpiration;
         $this->accessControlRequestMethod = $accessControlRequestMethod;
         $this->contentLanguage = $contentLanguage;
@@ -477,5 +473,6 @@ final class MetaQueryFile extends Model
         $this->fileModifiedTime = $fileModifiedTime;
         $this->duration = $duration;
         $this->videoStreams = $videoStreams;
+        $this->insights = $insights;
     }
 }

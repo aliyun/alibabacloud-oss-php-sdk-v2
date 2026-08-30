@@ -468,6 +468,15 @@ BBB;
           <Value>val</Value>
         </UserMeta>
       </OSSUserMeta>
+      <Insights>
+        <Image>
+          <Caption>There stands a person.</Caption>
+          <Description>In the picture, there is a person wearing a dark suit jacket with a white shirt underneath. The background is a gradient from light blue to gray</Description>
+        </Image>
+		<Video>
+          <Caption>The video shows two different scenes</Caption>
+        </Video>
+      </Insights>
     </File>
   </Files>
 </MetaQuery>';
@@ -590,6 +599,10 @@ BBB;
         $this->assertEquals(1, count($result->files->file[0]->ossUserMeta->userMetas));
         $this->assertEquals('key', $result->files->file[0]->ossUserMeta->userMetas[0]->key);
         $this->assertEquals('val', $result->files->file[0]->ossUserMeta->userMetas[0]->value);
+        $this->assertEquals('There stands a person.', $result->files->file[0]->insights->image->caption);
+        $this->assertEquals('In the picture, there is a person wearing a dark suit jacket with a white shirt underneath. The background is a gradient from light blue to gray', $result->files->file[0]->insights->image->description);
+        $this->assertEquals('The video shows two different scenes', $result->files->file[0]->insights->video->caption);
+        $this->assertEquals('', $result->files->file[0]->insights->video->description);
     }
 
     public function testFromCloseMetaQuery()
