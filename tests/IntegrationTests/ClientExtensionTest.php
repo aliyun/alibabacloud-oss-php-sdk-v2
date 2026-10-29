@@ -804,6 +804,78 @@ class ClientExtensionTest extends TestIntegration
         $this->assertEquals('v2', $tagProp->tagSet->tags[1]->value);
     }
 
+    public function testCopierSpecialCharacterTagging(): void
+    {
+        $client = self::getDefaultClient();
+        $buckeName = self::$bucketName;
+        $key = self::randomObjectName();
+        $totalSize = 250 * 1024 + 123;
+        $partSize = 100 * 1024;
+        $filename = self::getTempFileName();
+        $this->generateFile($filename, $totalSize);
+        $content = \file_get_contents($filename);
+        $fileMd5 = md5(file_get_contents($filename), true);
+
+        $sourceKey = $key;
+        $request = new Oss\Models\PutObjectRequest($buckeName, $sourceKey);
+        $request->body = Oss\Utils::streamFor($content);
+        $result = $client->putObject($request);
+        $this->assertEquals(200, $result->statusCode);
+        $this->assertEquals('OK', $result->status);
+
+        // Source tags contain =, + and spaces. The Copier must URL-encode each
+        // key/value when it builds the x-oss-tagging header for multipart copy.
+        $tagging = new Oss\Models\Tagging(
+            new Oss\Models\TagSet([
+                new Oss\Models\Tag('a=b', 'c+d'),
+                new Oss\Models\Tag('key with space', 'value+with=special'),
+            ])
+        );
+        $client->putObjectTagging(new Oss\Models\PutObjectTaggingRequest($buckeName, $sourceKey, $tagging));
+
+        $srcTagProp = $client->getObjectTagging(new Oss\Models\GetObjectTaggingRequest($buckeName, $sourceKey));
+        $this->assertCount(2, $srcTagProp->tagSet->tags);
+        $this->assertEquals('a=b', $srcTagProp->tagSet->tags[0]->key);
+        $this->assertEquals('c+d', $srcTagProp->tagSet->tags[0]->value);
+        $this->assertEquals('key with space', $srcTagProp->tagSet->tags[1]->key);
+        $this->assertEquals('value+with=special', $srcTagProp->tagSet->tags[1]->value);
+
+        $copier = $client->newCopier(
+            [
+                'part_size' => $partSize,
+                'parallel_num' => 1,
+            ]
+        );
+
+        $dstKey = "multipart-copy-special-tagging-$key";
+        $copyRequest = new Oss\Models\CopyObjectRequest(
+            $buckeName,
+            $dstKey,
+            $buckeName,
+            $sourceKey
+        );
+        $result = $copier->copy(
+            $copyRequest,
+            [
+                'multipart_copy_threshold' => 0,
+                'disable_shallow_copy' => true
+            ]
+        );
+        $this->assertEquals(200, $result->statusCode);
+        $this->assertEquals('OK', $result->status);
+        $this->assertEquals(32, strlen($result->uploadId));
+
+        $objectMd5 = md5($this->object_get_contents($client, $buckeName, $dstKey), true);
+        $this->assertEquals($fileMd5, $objectMd5);
+
+        $dstTagProp = $client->getObjectTagging(new Oss\Models\GetObjectTaggingRequest($buckeName, $dstKey));
+        $this->assertCount(2, $dstTagProp->tagSet->tags);
+        $this->assertEquals('a=b', $dstTagProp->tagSet->tags[0]->key);
+        $this->assertEquals('c+d', $dstTagProp->tagSet->tags[0]->value);
+        $this->assertEquals('key with space', $dstTagProp->tagSet->tags[1]->key);
+        $this->assertEquals('value+with=special', $dstTagProp->tagSet->tags[1]->value);
+    }
+
     public function testCopierFail(): void
     {
         $client = self::getDefaultClient();

@@ -376,7 +376,9 @@ final class Copier
                 if ($tagProp != null && $tagProp->tagSet != null) {
                     $tags = [];
                     foreach ($tagProp->tagSet->tags ?? [] as $tag) {
-                        $tags[] = sprintf('%s=%s', $tag->key, $tag->value);
+                        $key = $tag->key ?? '';
+                        $value = $tag->value ?? '';
+                        $tags[] = sprintf('%s=%s', rawurlencode($key), rawurlencode($value));
                     }
 
                     if (!empty($tags)) {
