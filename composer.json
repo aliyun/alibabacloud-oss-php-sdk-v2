@@ -15,9 +15,9 @@
         "ext-simplexml": "*",
         "ext-json": "*",
         "psr/http-message": "^1.0 || ^2.0",
-        "guzzlehttp/guzzle": "^6.5.8 || ^7.4.5",
-        "guzzlehttp/psr7": "^2.7",
-        "guzzlehttp/promises": "^1.4.0 || ^2.0"
+        "guzzlehttp/guzzle": "^6.5.8 || ^7.4.5 || ^8.0",
+        "guzzlehttp/psr7": "^2.7 || ^3.0",
+        "guzzlehttp/promises": "^1.4.0 || ^2.0 || ^3.0"
     },
     "require-dev" : {
         "phpunit/phpunit": "*"
