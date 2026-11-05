@@ -27,7 +27,7 @@ final class ClientErrorRetryable implements ErrorRetryableInterface
         }
 
         // a connection exception
-        if ($reason instanceof GuzzleHttp\Exception\ConnectException) {
+        if ($reason instanceof \Psr\Http\Client\NetworkExceptionInterface || $reason instanceof GuzzleHttp\Exception\ConnectException) {
             return true;
         }
 

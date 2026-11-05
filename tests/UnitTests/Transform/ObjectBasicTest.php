@@ -621,13 +621,13 @@ BBB;
             $output = new OperationOutput(
                 'OK',
                 200,
-                ['x-oss-request-id' => '123', 'ETag' => '"D41D8CD98F00B204E9800998ECF8****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length],
+                ['x-oss-request-id' => '123', 'ETag' => '"D41D8CD98F00B204E9800998ECF8****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length],
                 Utils::streamFor($body),
                 new OperationInput('GetObject', 'GET', []),
                 null,
                 new \GuzzleHttp\Psr7\Response(
                     200,
-                    ['x-oss-request-id' => '123', 'ETag' => '"D41D8CD98F00B204E9800998ECF8****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length],
+                    ['x-oss-request-id' => '123', 'ETag' => '"D41D8CD98F00B204E9800998ECF8****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length],
                     $body
                 ),
             );
@@ -657,13 +657,13 @@ BBB;
             $output = new OperationOutput(
                 'Partial Content',
                 206,
-                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length2, 'Accept-Ranges' => 'bytes', 'Content-Range' => 'bytes 100-900/34460'],
+                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length2, 'Accept-Ranges' => 'bytes', 'Content-Range' => 'bytes 100-900/34460'],
                 Utils::streamFor($body2),
                 new OperationInput('GetObject', 'GET', []),
                 null,
                 new \GuzzleHttp\Psr7\Response(
                     200,
-                    ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length2, 'Accept-Ranges' => 'bytes', 'Content-Range' => 'bytes 100-900/34460'],
+                    ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length2, 'Accept-Ranges' => 'bytes', 'Content-Range' => 'bytes 100-900/34460'],
                     $body2
                 ),
             );
@@ -691,13 +691,13 @@ BBB;
         $output = new OperationOutput(
             'OK',
             200,
-            ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length, 'Accept-Ranges' => 'bytes', 'Content-disposition' => 'attachment; filename=testing.txt', 'Cache-control' => 'no-cache', 'X-Oss-Storage-Class' => 'Standard', 'x-oss-server-side-encryption' => 'KMS', 'x-oss-server-side-data-encryption' => 'SM4', 'x-oss-server-side-encryption-key-id' => '12f8711f-90df-4e0d-903d-ab972b0f****', 'x-oss-tagging-count' => '2', 'Content-MD5' => 'si4Nw3Cn9wZ/rPX3XX+j****', 'x-oss-hash-crc64ecma' => '870718044876840****', 'x-oss-meta-name' => 'demo', 'x-oss-meta-email' => 'demo@aliyun.com'],
+            ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length, 'Accept-Ranges' => 'bytes', 'Content-disposition' => 'attachment; filename=testing.txt', 'Cache-control' => 'no-cache', 'X-Oss-Storage-Class' => 'Standard', 'x-oss-server-side-encryption' => 'KMS', 'x-oss-server-side-data-encryption' => 'SM4', 'x-oss-server-side-encryption-key-id' => '12f8711f-90df-4e0d-903d-ab972b0f****', 'x-oss-tagging-count' => '2', 'Content-MD5' => 'si4Nw3Cn9wZ/rPX3XX+j****', 'x-oss-hash-crc64ecma' => '870718044876840****', 'x-oss-meta-name' => 'demo', 'x-oss-meta-email' => 'demo@aliyun.com'],
             Utils::streamFor($body),
             new OperationInput('GetObject', 'GET', []),
             null,
             new \GuzzleHttp\Psr7\Response(
                 200,
-                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length, 'Accept-Ranges' => 'bytes', 'Content-disposition' => 'attachment; filename=testing.txt', 'Cache-control' => 'no-cache', 'X-Oss-Storage-Class' => 'Standard', 'x-oss-server-side-encryption' => 'KMS', 'x-oss-server-side-data-encryption' => 'SM4', 'x-oss-server-side-encryption-key-id' => '12f8711f-90df-4e0d-903d-ab972b0f****', 'x-oss-tagging-count' => '2', 'Content-MD5' => 'si4Nw3Cn9wZ/rPX3XX+j****', 'x-oss-hash-crc64ecma' => '870718044876840****', 'x-oss-meta-name' => 'demo', 'x-oss-meta-email' => 'demo@aliyun.com'],
+                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length, 'Accept-Ranges' => 'bytes', 'Content-disposition' => 'attachment; filename=testing.txt', 'Cache-control' => 'no-cache', 'X-Oss-Storage-Class' => 'Standard', 'x-oss-server-side-encryption' => 'KMS', 'x-oss-server-side-data-encryption' => 'SM4', 'x-oss-server-side-encryption-key-id' => '12f8711f-90df-4e0d-903d-ab972b0f****', 'x-oss-tagging-count' => '2', 'Content-MD5' => 'si4Nw3Cn9wZ/rPX3XX+j****', 'x-oss-hash-crc64ecma' => '870718044876840****', 'x-oss-meta-name' => 'demo', 'x-oss-meta-email' => 'demo@aliyun.com'],
                 $body
             ),
         );
@@ -730,13 +730,13 @@ BBB;
         $output = new OperationOutput(
             'OK',
             200,
-            ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-restore' => 'ongoing-request="false", expiry-date="Sun, 16 Apr 2017 08:12:33 GMT"'],
+            ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-restore' => 'ongoing-request="false", expiry-date="Sun, 16 Apr 2017 08:12:33 GMT"'],
             Utils::streamFor($body),
             new OperationInput('GetObject', 'GET', []),
             null,
             new \GuzzleHttp\Psr7\Response(
                 200,
-                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-restore' => 'ongoing-request="false", expiry-date="Sun, 16 Apr 2017 08:12:33 GMT"'],
+                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-restore' => 'ongoing-request="false", expiry-date="Sun, 16 Apr 2017 08:12:33 GMT"'],
                 $body
             ),
         );
@@ -760,13 +760,13 @@ BBB;
         $output = new OperationOutput(
             'OK',
             200,
-            ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-version-id' => 'CAEQNhiBgM0BYiIDc4MGZjZGI2OTBjOTRmNTE5NmU5NmFhZjhjYmY*****', 'x-oss-delete-marker' => 'true'],
+            ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-version-id' => 'CAEQNhiBgM0BYiIDc4MGZjZGI2OTBjOTRmNTE5NmU5NmFhZjhjYmY*****', 'x-oss-delete-marker' => 'true'],
             Utils::streamFor($body),
             new OperationInput('GetObject', 'GET', []),
             null,
             new \GuzzleHttp\Psr7\Response(
                 200,
-                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => $length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-version-id' => 'CAEQNhiBgM0BYiIDc4MGZjZGI2OTBjOTRmNTE5NmU5NmFhZjhjYmY*****', 'x-oss-delete-marker' => 'true'],
+                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Normal', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-version-id' => 'CAEQNhiBgM0BYiIDc4MGZjZGI2OTBjOTRmNTE5NmU5NmFhZjhjYmY*****', 'x-oss-delete-marker' => 'true'],
                 $body
             ),
         );
@@ -791,13 +791,13 @@ BBB;
         $output = new OperationOutput(
             'OK',
             200,
-            ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Appendable', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'text', 'Content-Length' => $length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-next-append-position' => '1001'],
+            ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Appendable', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'text', 'Content-Length' => (string)$length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-next-append-position' => '1001'],
             Utils::streamFor($body),
             new OperationInput('GetObject', 'GET', []),
             null,
             new \GuzzleHttp\Psr7\Response(
                 200,
-                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Appendable', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'text', 'Content-Length' => $length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-next-append-position' => '1001'],
+                ['x-oss-request-id' => '123', 'ETag' => '"5B3C1A2E05E1B002CC607C****"', 'x-oss-object-type' => 'Appendable', 'Last-Modified' => 'Fri, 24 Feb 2012 06:07:48 GMT', 'Content-Type' => 'text', 'Content-Length' => (string)$length, 'X-Oss-Storage-Class' => 'Standard', 'x-oss-next-append-position' => '1001'],
                 $body
             ),
         );
@@ -990,13 +990,13 @@ BBB;
             $output = new OperationOutput(
                 'OK',
                 200,
-                ['x-oss-request-id' => '123', 'ETag' => '"F2064A169EE92E9775EE5324D0B1****"', 'Content-Type' => 'image/jpg', 'Content-Length' => $length, 'x-oss-hash-crc64ecma' => '1275300285919610****'],
+                ['x-oss-request-id' => '123', 'ETag' => '"F2064A169EE92E9775EE5324D0B1****"', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length, 'x-oss-hash-crc64ecma' => '1275300285919610****'],
                 Utils::streamFor($body),
                 new OperationInput('CopyObject', 'PUT', []),
                 null,
                 new \GuzzleHttp\Psr7\Response(
                     200,
-                    ['x-oss-request-id' => '123', 'ETag' => '"F2064A169EE92E9775EE5324D0B1****"', 'Content-Type' => 'image/jpg', 'Content-Length' => $length, 'x-oss-hash-crc64ecma' => '1275300285919610****'],
+                    ['x-oss-request-id' => '123', 'ETag' => '"F2064A169EE92E9775EE5324D0B1****"', 'Content-Type' => 'image/jpg', 'Content-Length' => (string)$length, 'x-oss-hash-crc64ecma' => '1275300285919610****'],
                     $body
                 ),
             );
@@ -1020,13 +1020,13 @@ BBB;
             $output = new OperationOutput(
                 'OK',
                 200,
-                ['x-oss-request-id' => '123', 'ETag' => '"F2064A169EE92E9775EE5324D0B1****"', 'Content-Type' => 'text', 'Content-Length' => $length, 'x-oss-hash-crc64ecma' => '1275300285919610****', "x-oss-server-side-encryption" => 'KMS', 'x-oss-server-side-data-encryption' => 'SM4', 'x-oss-server-side-encryption-key-id' => '12f8711f-90df-4e0d-903d-ab972b0f****', 'x-oss-copy-source-version-id' => 'CAEQHxiBgICDvseg3hgiIGZmOGNjNWJiZDUzNjQxNDM4MWM2NDc1YjhkYTk3****', 'x-oss-version-id' => 'CAEQHxiBgMD4qOWz3hgiIDUyMWIzNTBjMWM4NjQ5MDJiNTM4YzEwZGQxM2Rk****'],
+                ['x-oss-request-id' => '123', 'ETag' => '"F2064A169EE92E9775EE5324D0B1****"', 'Content-Type' => 'text', 'Content-Length' => (string)$length, 'x-oss-hash-crc64ecma' => '1275300285919610****', "x-oss-server-side-encryption" => 'KMS', 'x-oss-server-side-data-encryption' => 'SM4', 'x-oss-server-side-encryption-key-id' => '12f8711f-90df-4e0d-903d-ab972b0f****', 'x-oss-copy-source-version-id' => 'CAEQHxiBgICDvseg3hgiIGZmOGNjNWJiZDUzNjQxNDM4MWM2NDc1YjhkYTk3****', 'x-oss-version-id' => 'CAEQHxiBgMD4qOWz3hgiIDUyMWIzNTBjMWM4NjQ5MDJiNTM4YzEwZGQxM2Rk****'],
                 Utils::streamFor($body),
                 new OperationInput('CopyObject', 'PUT', []),
                 null,
                 new \GuzzleHttp\Psr7\Response(
                     200,
-                    ['x-oss-request-id' => '123', 'ETag' => '"F2064A169EE92E9775EE5324D0B1****"', 'Content-Type' => 'text', 'Content-Length' => $length, 'x-oss-hash-crc64ecma' => '1275300285919610****', "x-oss-server-side-encryption" => 'KMS', 'x-oss-server-side-data-encryption' => 'SM4', 'x-oss-server-side-encryption-key-id' => '12f8711f-90df-4e0d-903d-ab972b0f****', 'x-oss-copy-source-version-id' => 'CAEQHxiBgICDvseg3hgiIGZmOGNjNWJiZDUzNjQxNDM4MWM2NDc1YjhkYTk3****', 'x-oss-version-id' => 'CAEQHxiBgMD4qOWz3hgiIDUyMWIzNTBjMWM4NjQ5MDJiNTM4YzEwZGQxM2Rk****'],
+                    ['x-oss-request-id' => '123', 'ETag' => '"F2064A169EE92E9775EE5324D0B1****"', 'Content-Type' => 'text', 'Content-Length' => (string)$length, 'x-oss-hash-crc64ecma' => '1275300285919610****', "x-oss-server-side-encryption" => 'KMS', 'x-oss-server-side-data-encryption' => 'SM4', 'x-oss-server-side-encryption-key-id' => '12f8711f-90df-4e0d-903d-ab972b0f****', 'x-oss-copy-source-version-id' => 'CAEQHxiBgICDvseg3hgiIGZmOGNjNWJiZDUzNjQxNDM4MWM2NDc1YjhkYTk3****', 'x-oss-version-id' => 'CAEQHxiBgMD4qOWz3hgiIDUyMWIzNTBjMWM4NjQ5MDJiNTM4YzEwZGQxM2Rk****'],
                     $body
                 ),
             );
